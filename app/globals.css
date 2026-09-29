@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 font-sans text-gray-800 antialiased;
+  }
+  a {
+    @apply text-bronze no-underline transition-colors;
+  }
+  a:hover {
+    @apply text-bronze-dark;
+  }
+  input,
+  textarea,
+  select {
+    outline-color: #b07a48;
+  }
+}
+
+@layer components {
+  /* Material Symbols Rounded icon glyph; size with text-[..px]. */
+  .icon {
+    font-family: "Material Symbols Rounded";
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: "FILL" 0;
+    user-select: none;
+  }
+  .icon-filled {
+    font-variation-settings: "FILL" 1;
+  }
+
+  /* Primary call to action: soft mint. */
+  .btn-primary {
+    @apply bg-mint font-semibold text-mint-ink transition-colors hover:bg-mint-hover hover:text-mint-ink;
+  }
+  .btn-outline {
+    @apply border border-line-strong bg-white font-semibold text-gray-800 transition-colors hover:text-gray-800;
+  }
+  .field-label {
+    @apply text-xs font-bold uppercase tracking-[0.04em];
+  }
+  .card {
+    @apply rounded-xl border border-line bg-white;
+  }
+}

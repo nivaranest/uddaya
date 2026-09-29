@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL@24,400,0..1" rel="stylesheet">
+<style>
+body{margin:0;background:#F9FAFB;color:#374151;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#B07A48;text-decoration:none}a:hover{color:#8A5A2B}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <header style="background:#fff;border-bottom:1px solid #ECE8E1;position:sticky;top:0;z-index:20">
+    <div style="max-width:1100px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:14px">
+      <a href="Candidate Dashboard.dc.html" aria-label="Back" style="width:40px;height:40px;border:1px solid #ECE8E1;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#1F2937"><span style="font-family:'Material Symbols Rounded';font-size:22px">arrow_back</span></a>
+      <h1 style="margin:0;font-family:Poppins;font-weight:600;font-size:clamp(22px,3vw,28px);color:#1F2937">My Profile</h1>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+        <sc-if value="{{ edit }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ cancel }}" style="height:38px;padding:0 14px;border-radius:10px;border:1px solid #ECE8E1;background:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer;color:#1F2937">Cancel</button>
+          <button onClick="{{ save }}" style="height:38px;padding:0 16px;border-radius:10px;border:0;background:#DCEFE4;color:#1F4D3A;font:inherit;font-size:14px;font-weight:600;cursor:pointer">Save</button>
+        </sc-if>
+        <div style="display:flex;background:#F3F4F6;border-radius:999px;padding:3px">
+          <button onClick="{{ toView }}" style="{{ viewTab }}">View</button>
+          <button onClick="{{ toEdit }}" style="{{ editTab }}">Edit</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div style="max-width:1100px;width:100%;margin:0 auto;padding:28px 24px 64px;display:flex;flex-direction:column;gap:24px">
+    <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:clamp(20px,3vw,32px);display:flex;gap:28px;flex-wrap:wrap;align-items:center">
+      <label style="position:relative;width:120px;height:120px;border-radius:50%;flex:0 0 auto;cursor:pointer;overflow:hidden;background:#FAF0DF;display:flex;align-items:center;justify-content:center" onMouseEnter="{{ photoEnter }}" onMouseLeave="{{ photoLeave }}">
+        <sc-if value="{{ hasPhoto }}"><img src="{{ photo }}" alt="Profile photo" style="width:100%;height:100%;object-fit:cover"></sc-if>
+        <sc-if value="{{ noPhoto }}" hint-placeholder-val="{{ true }}"><span style="font-family:Poppins;font-weight:600;font-size:40px;color:#6B4423">{{ initials }}</span></sc-if>
+        <sc-if value="{{ photoHover }}"><span style="position:absolute;inset:0;background:rgba(31,41,55,0.6);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:12px;font-weight:600"><span style="font-family:'Material Symbols Rounded';font-size:24px">photo_camera</span>Change Photo</span></sc-if>
+        <input type="file" accept="image/*" onChange="{{ onPhoto }}" style="display:none">
+      </label>
+      <div style="flex:1 1 300px;display:flex;flex-direction:column;gap:6px;min-width:0">
+        <span style="font-family:Poppins;font-weight:600;font-size:24px;color:#1F2937">{{ basic.name }}</span>
+        <span style="font-size:16px;color:#6B7280">{{ basic.headline }}</span>
+        <span style="font-size:14px;display:flex;align-items:center;gap:4px"><span style="font-family:'Material Symbols Rounded';font-size:18px;color:#B07A48">location_on</span>{{ basic.location }}</span>
+        <span style="font-size:12px;color:#6B7280">Member since Feb 2026</span>
+      </div>
+      <div style="flex:0 1 260px;display:flex;align-items:center;gap:16px">
+        <div style="position:relative;width:104px;height:104px;flex:0 0 auto">
+          <svg width="104" height="104" viewBox="0 0 104 104"><circle cx="52" cy="52" r="44" fill="none" stroke="#F3F4F6" stroke-width="10"></circle><circle cx="52" cy="52" r="44" fill="none" stroke="#B07A48" stroke-width="10" stroke-linecap="round" stroke-dasharray="{{ ringDash }}" transform="rotate(-90 52 52)"></circle></svg>
+          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:Poppins;font-weight:600;font-size:22px;color:#1F2937">{{ pctLabel }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-weight:600;font-size:14px;color:#1F2937">Profile {{ pct }}% Complete</span>
+          <span style="font-size:13px;color:#6B7280">{{ nextTip }}</span>
+          <sc-if value="{{ incomplete }}"><button onClick="{{ completeNow }}" style="align-self:flex-start;padding:8px 14px;border-radius:8px;border:0;background:#DCEFE4;color:#1F4D3A;font:inherit;font-size:13px;font-weight:600;cursor:pointer">Complete Profile</button></sc-if>
+        </div>
+      </div>
+    </section>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:24px;align-items:start">
+      <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px;color:#1F2937">Basic Information</h2><button onClick="{{ toEdit }}" aria-label="Edit" style="border:0;background:transparent;cursor:pointer;display:flex"><span style="font-family:'Material Symbols Rounded';font-size:20px;color:#B07A48">edit</span></button></div>
+        <sc-for list="{{ fields }}" as="f" hint-placeholder-count="5">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:12px;color:#6B7280;display:flex;align-items:center;gap:4px">{{ f.label }}<sc-if value="{{ f.locked }}"><span style="font-family:'Material Symbols Rounded';font-size:14px;color:#3F7A5E">verified</span></sc-if></span>
+            <sc-if value="{{ f.editable }}"><input value="{{ f.value }}" onChange="{{ f.change }}" style="height:40px;border:1px solid #ECE8E1;border-radius:8px;padding:0 12px;font:inherit;font-size:14px;outline-color:#B07A48;color:#1F2937"></sc-if>
+            <sc-if value="{{ f.readonly }}"><span style="font-size:15px;color:#1F2937;display:flex;align-items:center;gap:6px">{{ f.value }}<sc-if value="{{ f.lockedEdit }}"><span style="font-size:11px;color:#6B7280">(verified, locked)</span></sc-if></span></sc-if>
+          </div>
+        </sc-for>
+      </section>
+
+      <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px;color:#1F2937">About You</h2><button onClick="{{ toEdit }}" aria-label="Edit" style="border:0;background:transparent;cursor:pointer;display:flex"><span style="font-family:'Material Symbols Rounded';font-size:20px;color:#B07A48">edit</span></button></div>
+        <sc-if value="{{ edit }}"><textarea value="{{ about }}" onChange="{{ onAbout }}" rows="7" style="border:1px solid #ECE8E1;border-radius:10px;padding:12px;font:inherit;font-size:14px;line-height:1.6;resize:vertical;outline-color:#B07A48;color:#1F2937"></textarea></sc-if>
+        <sc-if value="{{ view }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font-size:15px;line-height:1.7;white-space:pre-wrap">{{ aboutText }}</p></sc-if>
+        <span style="align-self:flex-end;font-size:12px;color:#6B7280">{{ aboutCount }}/500</span>
+      </section>
+
+      <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px;color:#1F2937">Experience</h2><button onClick="{{ addExp }}" style="padding:6px 12px;border-radius:8px;border:0;background:#DCEFE4;color:#1F4D3A;font:inherit;font-size:13px;font-weight:600;cursor:pointer">+ Add</button></div>
+        <div style="display:flex;flex-direction:column;gap:0;border-left:2px solid #B07A48;margin-left:6px">
+          <sc-for list="{{ exp }}" as="x" hint-placeholder-count="2">
+            <div onMouseEnter="{{ x.enter }}" onMouseLeave="{{ x.leave }}" style="position:relative;padding:4px 0 20px 22px;display:flex;flex-direction:column;gap:4px">
+              <span style="position:absolute;left:-7px;top:8px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid #B07A48"></span>
+              <sc-if value="{{ x.editing }}">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px">
+                  <input value="{{ x.company }}" onChange="{{ x.set.company }}" placeholder="Company" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+                  <input value="{{ x.title }}" onChange="{{ x.set.title }}" placeholder="Job title" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+                  <input value="{{ x.dates }}" onChange="{{ x.set.dates }}" placeholder="Jan 2023 - Present" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+                </div>
+                <textarea value="{{ x.desc }}" onChange="{{ x.set.desc }}" rows="2" placeholder="What you did" style="border:1px solid #ECE8E1;border-radius:8px;padding:8px 10px;font:inherit;font-size:14px;outline-color:#B07A48;resize:vertical"></textarea>
+              </sc-if>
+              <sc-if value="{{ x.viewing }}">
+                <span style="font-family:Poppins;font-weight:600;font-size:16px;color:#1F2937">{{ x.company }}</span>
+                <span style="font-size:14px">{{ x.title }}</span>
+                <span style="font-size:12px;color:#6B7280">{{ x.dates }}</span>
+                <span style="font-size:14px;line-height:1.5;margin-top:2px">{{ x.desc }}</span>
+              </sc-if>
+              <sc-if value="{{ x.showTools }}">
+                <div style="position:absolute;right:0;top:0;display:flex;gap:4px">
+                  <button onClick="{{ toEdit }}" aria-label="Edit" style="width:30px;height:30px;border:0;border-radius:6px;background:#F3F4F6;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:17px;color:#B07A48">edit</span></button>
+                  <button onClick="{{ x.remove }}" aria-label="Delete" style="width:30px;height:30px;border:0;border-radius:6px;background:#F3F4F6;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:17px;color:#B35A52">delete</span></button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ addExp }}" style="align-self:flex-start;border:0;background:transparent;color:#3F7A5E;font:inherit;font-size:14px;font-weight:600;cursor:pointer;padding:0">+ Add Experience</button>
+      </section>
+
+      <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px;color:#1F2937">Education</h2><button onClick="{{ addEdu }}" style="padding:6px 12px;border-radius:8px;border:0;background:#DCEFE4;color:#1F4D3A;font:inherit;font-size:13px;font-weight:600;cursor:pointer">+ Add</button></div>
+        <sc-for list="{{ edu }}" as="x" hint-placeholder-count="1">
+          <div onMouseEnter="{{ x.enter }}" onMouseLeave="{{ x.leave }}" style="position:relative;display:flex;gap:14px;align-items:flex-start">
+            <span style="width:auto;height:auto;border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><span style="font-family:'Material Symbols Rounded';font-size:24px;color:#B07A48">school</span></span>
+            <sc-if value="{{ x.editing }}">
+              <div style="flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">
+                <input value="{{ x.school }}" onChange="{{ x.set.school }}" placeholder="School" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+                <input value="{{ x.degree }}" onChange="{{ x.set.degree }}" placeholder="Degree" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+                <input value="{{ x.year }}" onChange="{{ x.set.year }}" placeholder="Year" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+              </div>
+            </sc-if>
+            <sc-if value="{{ x.viewing }}">
+              <div style="display:flex;flex-direction:column;gap:3px"><span style="font-family:Poppins;font-weight:600;font-size:16px;color:#1F2937">{{ x.school }}</span><span style="font-size:14px">{{ x.degree }}</span><span style="font-size:12px;color:#6B7280">{{ x.year }}</span></div>
+            </sc-if>
+            <sc-if value="{{ x.showTools }}">
+              <div style="position:absolute;right:0;top:0;display:flex;gap:4px">
+                <button onClick="{{ toEdit }}" aria-label="Edit" style="width:30px;height:30px;border:0;border-radius:6px;background:#F3F4F6;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:17px;color:#B07A48">edit</span></button>
+                <button onClick="{{ x.remove }}" aria-label="Delete" style="width:30px;height:30px;border:0;border-radius:6px;background:#F3F4F6;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:17px;color:#B35A52">delete</span></button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <button onClick="{{ addEdu }}" style="align-self:flex-start;border:0;background:transparent;color:#3F7A5E;font:inherit;font-size:14px;font-weight:600;cursor:pointer;padding:0">+ Add Education</button>
+      </section>
+
+      <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px;color:#1F2937">Skills</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ skills }}" as="k" hint-placeholder-count="7">
+            <span onMouseEnter="{{ k.enter }}" onMouseLeave="{{ k.leave }}" style="position:relative;display:inline-flex;align-items:center;gap:6px;background:#E9EDF3;color:#1F2937;padding:7px 10px 7px 12px;border-radius:8px;font-size:14px;font-weight:500">
+              {{ k.name }}
+              <sc-if value="{{ k.hasEnd }}"><span style="background:#E3C08A;color:#1F2937;font-size:11px;font-weight:700;padding:1px 6px;border-radius:999px">{{ k.count }}</span></sc-if>
+              <sc-if value="{{ edit }}"><button onClick="{{ k.remove }}" aria-label="Remove" style="border:0;background:transparent;color:#1F2937;cursor:pointer;padding:0;display:flex"><span style="font-family:'Material Symbols Rounded';font-size:16px">close</span></button></sc-if>
+              <sc-if value="{{ k.tip }}">
+                <span style="position:absolute;left:0;top:calc(100% + 6px);background:#fff;color:#1F2937;border:1px solid #ECE8E1;border-radius:10px;box-shadow:0 10px 24px rgba(31,41,55,0.14);padding:10px;z-index:5;display:flex;flex-direction:column;gap:8px;width:220px;font-weight:400">
+                  <span style="display:flex">
+                    <sc-for list="{{ k.faces }}" as="p"><span style="width:26px;height:26px;border-radius:50%;background:#FAF0DF;border:2px solid #fff;margin-right:-6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#6B4423">{{ p }}</span></sc-for>
+                  </span>
+                  <span style="font-size:12px;line-height:1.4">Endorsed by {{ k.names }}</span>
+                </span>
+              </sc-if>
+            </span>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:8px">
+          <input value="{{ newSkill }}" onChange="{{ onNewSkill }}" onKeyDown="{{ skillKey }}" list="skill-sug" placeholder="Search skills to add" style="flex:1;min-width:0;height:40px;border:1px solid #ECE8E1;border-radius:8px;padding:0 12px;font:inherit;font-size:14px;outline-color:#B07A48">
+          <datalist id="skill-sug"><option value="Node.js"></option><option value="TypeScript"></option><option value="Docker"></option><option value="Kubernetes"></option><option value="Django"></option><option value="GraphQL"></option></datalist>
+          <button onClick="{{ addSkill }}" style="height:40px;padding:0 16px;border-radius:8px;border:0;background:#DCEFE4;color:#1F4D3A;font:inherit;font-size:14px;font-weight:600;cursor:pointer">Add</button>
+        </div>
+      </section>
+
+      <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px;color:#1F2937">Certifications</h2><button onClick="{{ addCert }}" style="padding:6px 12px;border-radius:8px;border:0;background:#DCEFE4;color:#1F4D3A;font:inherit;font-size:13px;font-weight:600;cursor:pointer">+ Add</button></div>
+        <sc-for list="{{ certs }}" as="x" hint-placeholder-count="1">
+          <div onMouseEnter="{{ x.enter }}" onMouseLeave="{{ x.leave }}" style="position:relative;display:flex;gap:14px;align-items:flex-start">
+            <span style="width:auto;height:auto;border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><span style="font-family:'Material Symbols Rounded';font-size:24px;color:#B07A48">workspace_premium</span></span>
+            <sc-if value="{{ x.editing }}">
+              <div style="flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">
+                <input value="{{ x.name }}" onChange="{{ x.set.name }}" placeholder="Certification" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+                <input value="{{ x.issuer }}" onChange="{{ x.set.issuer }}" placeholder="Issuer" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+                <input value="{{ x.date }}" onChange="{{ x.set.date }}" placeholder="Issue date" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+                <input value="{{ x.cred }}" onChange="{{ x.set.cred }}" placeholder="Credential ID" style="height:38px;border:1px solid #ECE8E1;border-radius:8px;padding:0 10px;font:inherit;font-size:14px;outline-color:#B07A48">
+              </div>
+            </sc-if>
+            <sc-if value="{{ x.viewing }}">
+              <div style="flex:1;display:flex;flex-direction:column;gap:3px">
+                <span style="font-weight:700;font-size:14px;color:#1F2937">{{ x.name }}</span>
+                <span style="font-size:12px">{{ x.issuer }}</span>
+                <span style="font-size:12px;color:#6B7280">{{ x.date }}</span>
+                <div style="display:flex;gap:12px;align-items:center;font-size:12px;margin-top:2px"><a href="#">Credential ID: {{ x.cred }}</a><a href="#" style="display:flex;align-items:center;gap:2px;color:#374151"><span style="font-family:'Material Symbols Rounded';font-size:16px">download</span>Certificate</a></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ x.showTools }}">
+              <div style="position:absolute;right:0;top:0;display:flex;gap:4px">
+                <button onClick="{{ toEdit }}" aria-label="Edit" style="width:30px;height:30px;border:0;border-radius:6px;background:#F3F4F6;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:17px;color:#B07A48">edit</span></button>
+                <button onClick="{{ x.remove }}" aria-label="Delete" style="width:30px;height:30px;border:0;border-radius:6px;background:#F3F4F6;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:17px;color:#B35A52">delete</span></button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <button onClick="{{ addCert }}" style="align-self:flex-start;border:0;background:transparent;color:#3F7A5E;font:inherit;font-size:14px;font-weight:600;cursor:pointer;padding:0">+ Add Certification</button>
+      </section>
+
+      <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px;color:#1F2937">Resume</h2>
+        <sc-for list="{{ resumes }}" as="r" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;border:1px solid #ECE8E1">
+            <span style="font-family:'Material Symbols Rounded';font-size:28px;color:#B07A48">description</span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+              <a href="#" style="{{ r.nameStyle }}">{{ r.name }}</a>
+              <span style="font-size:12px;color:#6B7280">{{ r.meta }}</span>
+            </div>
+            <sc-if value="{{ r.secondary }}"><button onClick="{{ r.primary }}" style="padding:6px 10px;border-radius:8px;border:1px solid #ECE8E1;background:#fff;font:inherit;font-size:12px;font-weight:600;cursor:pointer;color:#1F2937;white-space:nowrap">Make primary</button></sc-if>
+            <button aria-label="Download" style="width:32px;height:32px;border:0;border-radius:8px;background:#F3F4F6;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:18px">download</span></button>
+            <button onClick="{{ r.remove }}" aria-label="Delete" style="width:32px;height:32px;border:0;border-radius:8px;background:#F3F4F6;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:18px;color:#B35A52">delete</span></button>
+          </div>
+        </sc-for>
+        <label onDragOver="{{ dzOver }}" onDragLeave="{{ dzLeave }}" onDrop="{{ dzDrop }}" style="{{ dzStyle }}">
+          <span style="font-family:'Material Symbols Rounded';font-size:32px;color:#B07A48">upload_file</span>
+          <span style="font-size:14px;color:#1F2937">Drag and drop, or <strong style="color:#3F7A5E">Upload Resume</strong></span>
+          <span style="font-size:12px;color:#6B7280">Accepted formats: PDF, DOC</span>
+          <input type="file" accept=".pdf,.doc,.docx" onChange="{{ onFile }}" style="display:none">
+        </label>
+        <a href="#" style="align-self:center;font-size:13px;font-weight:600">Create new from template</a>
+      </section>
+    </div>
+  </div>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1F2937;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:60;display:flex;align-items:center;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:20px;color:#8FC3A8">check_circle</span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const INIT = {
+  photo: '',
+  basic: { name: 'Sairam Kumar', email: 'sairam@email.com', phone: '+91 9876543210', location: 'Hyderabad, India', headline: 'Full Stack Developer | React & Node.js' },
+  about: 'Experienced full-stack developer with 5+ years building scalable web applications.\nExpertise in React, Node.js, and cloud technologies.\nPassionate about clean code and mentoring junior developers.',
+  exp: [
+    { company: 'TechCorp', title: 'Senior Software Engineer', dates: 'Jan 2023 - Present', desc: 'Led backend team of 5 building the subscription billing platform.' },
+    { company: 'CloudSoft', title: 'Full Stack Developer', dates: 'Jun 2020 - Dec 2022', desc: 'Built customer dashboards in React and Node.js services on AWS.' }
+  ],
+  edu: [{ school: 'University of Hyderabad', degree: 'B.Tech in Computer Science', year: '2018' }],
+  skills: [['Python', 5], ['JavaScript', 8], ['React', 6], ['AWS', 0], ['PostgreSQL', 0], ['Leadership', 0], ['Communication', 0]],
+  certs: [{ name: 'AWS Solutions Architect - Associate', issuer: 'Amazon Web Services', date: 'Mar 2023', cred: '12345678' }],
+  resumes: [{ name: 'Sairam_Kumar_Resume_2026.pdf', meta: 'Updated 15 days ago' }, { name: 'Resume_TechRole.pdf', meta: 'Updated 2 months ago' }, { name: 'Resume_Leadership.pdf', meta: 'Updated 4 months ago' }]
+};
+const PEOPLE = ['Ananya Iyer', 'Rohit Menon', 'Priya Rao', 'Vikram Singh', 'Meera Pillai', 'Arjun Reddy', 'Kavya Nair', 'Neha Gupta'];
+class Component extends DCLogic {
+  state = { ...INIT, edit: false, backup: null, hover: null, photoHover: false, newSkill: '', dz: false, toast: '' };
+  componentWillUnmount() { clearTimeout(this.tt); }
+  toast(m) { clearTimeout(this.tt); this.setState({ toast: m }); this.tt = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  startEdit() { if (!this.state.edit) { const { photo, basic, about, exp, edu, skills, certs, resumes } = this.state; this.setState({ edit: true, backup: { photo, basic, about, exp, edu, skills, certs, resumes } }); } }
+  list(key, fields, prefix) {
+    const s = this.state;
+    return s[key].map((x, i) => {
+      const id = prefix + i;
+      return { ...x, editing: s.edit, viewing: !s.edit, showTools: !s.edit && s.hover === id,
+        enter: () => this.setState({ hover: id }), leave: () => this.setState({ hover: null }),
+        remove: () => { this.setState(p => ({ [key]: p[key].filter((_, k) => k !== i) })); this.toast('Removed'); },
+        set: Object.fromEntries(fields.map(f => [f, e => { const v = e.target.value; this.setState(p => ({ [key]: p[key].map((y, k) => k === i ? { ...y, [f]: v } : y) })); }])) };
+    });
+  }
+  addFile(file) { if (!file) return; this.setState(p => ({ resumes: [...p.resumes, { name: file.name, meta: 'Uploaded just now' }] })); this.toast(`${file.name} uploaded`); }
+  renderVals() {
+    const s = this.state, b = s.basic;
+    const checks = [['photo', 15, !!s.photo, 'Next: Add a profile photo'], ['basic', 20, !!(b.name && b.email && b.phone && b.location), 'Next: Fill in your basic info'], ['about', 15, s.about.trim().length > 20, 'Next: Add a bio'], ['exp', 15, s.exp.length > 0, 'Next: Add your experience'], ['edu', 10, s.edu.length > 0, 'Next: Add your education'], ['skills', 10, s.skills.length >= 3, 'Next: Add at least 3 skills'], ['certs', 5, s.certs.length > 0, 'Next: Add a certification'], ['resume', 10, s.resumes.length > 0, 'Next: Upload a resume']];
+    const pct = checks.reduce((a, c) => a + (c[2] ? c[1] : 0), 0), missing = checks.find(c => !c[2]);
+    const tab = on => ({ padding: '6px 14px', borderRadius: 999, border: 0, font: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', background: on ? '#fff' : 'transparent', color: on ? '#1F2937' : '#6B7280', boxShadow: on ? '0 1px 3px rgba(31,41,55,0.12)' : 'none' });
+    const addSkill = () => { const n = s.newSkill.trim(); if (!n || s.skills.some(k => k[0].toLowerCase() === n.toLowerCase())) return; this.setState(p => ({ skills: [...p.skills, [n, 0]], newSkill: '' })); this.toast(`${n} added`); };
+    return {
+      edit: s.edit, view: !s.edit, basic: b, toast: s.toast, pct, pctLabel: pct + '%', ringDash: `${276.5 * pct / 100} 276.5`,
+      nextTip: missing ? missing[3] : 'Your profile is complete', incomplete: !!missing,
+      completeNow: () => { if (missing && missing[0] === 'photo') this.toast('Click your avatar to add a photo'); else this.startEdit(); },
+      viewTab: tab(!s.edit), editTab: tab(s.edit),
+      toView: () => this.setState({ edit: false, backup: null }), toEdit: () => this.startEdit(),
+      save: () => { this.setState({ edit: false, backup: null }); this.toast('Profile saved'); },
+      cancel: () => this.setState({ ...s.backup, edit: false, backup: null }),
+      photo: s.photo, hasPhoto: !!s.photo, noPhoto: !s.photo, photoHover: s.photoHover,
+      initials: b.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(),
+      photoEnter: () => this.setState({ photoHover: true }), photoLeave: () => this.setState({ photoHover: false }),
+      onPhoto: e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = () => { this.setState({ photo: r.result }); this.toast('Photo updated'); }; r.readAsDataURL(f); },
+      fields: [['Full Name', 'name'], ['Email', 'email', 1], ['Phone', 'phone'], ['Location', 'location'], ['Professional Headline', 'headline']].map(([label, k, locked]) => ({ label, value: b[k], locked: !!locked, lockedEdit: !!locked && s.edit, editable: s.edit && !locked, readonly: !s.edit || !!locked,
+        change: e => { const v = e.target.value; this.setState(p => ({ basic: { ...p.basic, [k]: v } })); } })),
+      about: s.about, aboutText: s.about || 'Add a short summary about yourself.', aboutCount: s.about.length,
+      onAbout: e => this.setState({ about: e.target.value.slice(0, 500) }),
+      exp: this.list('exp', ['company', 'title', 'dates', 'desc'], 'e'), edu: this.list('edu', ['school', 'degree', 'year'], 'd'), certs: this.list('certs', ['name', 'issuer', 'date', 'cred'], 'c'),
+      addExp: () => { this.startEdit(); this.setState(p => ({ exp: [{ company: '', title: '', dates: '', desc: '' }, ...p.exp] })); },
+      addEdu: () => { this.startEdit(); this.setState(p => ({ edu: [...p.edu, { school: '', degree: '', year: '' }] })); },
+      addCert: () => { this.startEdit(); this.setState(p => ({ certs: [...p.certs, { name: '', issuer: '', date: '', cred: '' }] })); },
+      skills: s.skills.map(([name, count], i) => ({ name, count, hasEnd: count > 0, tip: count > 0 && s.hover === 'k' + i,
+        faces: PEOPLE.slice(0, Math.min(count, 4)).map(p => p.split(' ').map(w => w[0]).join('')),
+        names: count > 2 ? `${PEOPLE.slice(0, 2).join(', ')} and ${count - 2} others` : PEOPLE.slice(0, count).join(' and '),
+        enter: () => this.setState({ hover: 'k' + i }), leave: () => this.setState({ hover: null }),
+        remove: () => this.setState(p => ({ skills: p.skills.filter((_, k) => k !== i) })) })),
+      newSkill: s.newSkill, onNewSkill: e => this.setState({ newSkill: e.target.value }), addSkill, skillKey: e => { if (e.key === 'Enter') addSkill(); },
+      resumes: s.resumes.map((r, i) => ({ ...r, secondary: i > 0, meta: i === 0 ? `Primary · ${r.meta}` : r.meta,
+        nameStyle: { fontSize: 14, fontWeight: i === 0 ? 700 : 500, color: '#4A6490', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+        primary: () => { this.setState(p => ({ resumes: [p.resumes[i], ...p.resumes.filter((_, k) => k !== i)] })); this.toast(`${r.name} is now primary`); },
+        remove: () => { this.setState(p => ({ resumes: p.resumes.filter((_, k) => k !== i) })); this.toast('Resume deleted'); } })),
+      dzStyle: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: 24, borderRadius: 10, border: `2px dashed ${s.dz ? '#8FC3A8' : '#ECE8E1'}`, background: s.dz ? '#F1F7F3' : '#F9FAFB', cursor: 'pointer', textAlign: 'center' },
+      dzOver: e => { e.preventDefault(); if (!s.dz) this.setState({ dz: true }); }, dzLeave: () => this.setState({ dz: false }),
+      dzDrop: e => { e.preventDefault(); this.setState({ dz: false }); this.addFile(e.dataTransfer.files[0]); },
+      onFile: e => this.addFile(e.target.files[0])
+    };
+  }
+}
+</script>
+</body>
+</html>

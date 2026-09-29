@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL@24,400,0..1" rel="stylesheet">
+<style>
+body{margin:0;background:#fff;color:#1F2937;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#B07A48;text-decoration:none}a:hover{color:#8A5A2B}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <header style="border-bottom:1px solid #ECE8E1;background:#fff;position:sticky;top:0;z-index:20">
+    <div style="max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <a href="Candidate Dashboard.dc.html" aria-label="Back" style="width:40px;height:40px;border:1px solid #ECE8E1;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#1F2937" style-hover="border-color:#B8B0A3;color:#1F2937"><span style="font-family:'Material Symbols Rounded';font-size:22px">arrow_back</span></a>
+      <nav style="display:flex;align-items:center;gap:8px;font-size:14px;color:#6B7280;flex-wrap:wrap">
+        <a href="Candidate Dashboard.dc.html" style="color:#6B7280" style-hover="color:#B07A48">Dashboard</a>
+        <span style="font-family:'Material Symbols Rounded';font-size:16px">chevron_right</span>
+        <a href="Candidate Dashboard.dc.html#jobs" style="color:#6B7280" style-hover="color:#B07A48">Explore Jobs</a>
+        <span style="font-family:'Material Symbols Rounded';font-size:16px">chevron_right</span>
+        <span style="color:#1F2937;font-weight:500">Senior Python Engineer</span>
+      </nav>
+      <a href="Landing Page.dc.html" style="margin-left:auto;font-family:Poppins;font-weight:600;font-size:20px;color:#1F2937">udda<span style="color:#B07A48">ya</span></a>
+    </div>
+  </header>
+
+  <div style="max-width:1200px;width:100%;margin:0 auto;padding:40px 24px;display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+    <main style="flex:7 1 520px;min-width:0;display:flex;flex-direction:column;gap:36px">
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="width:60px;height:60px;border-radius:10px;background:#1F2937;color:#fff;font-family:Poppins;font-weight:600;font-size:24px;display:flex;align-items:center;justify-content:center">T</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:Poppins;font-weight:600;font-size:24px">TechCorp</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span style="font-size:13px;color:#4B5563;display:flex;align-items:center;gap:4px"><span style="font-family:'Material Symbols Rounded';font-size:16px">location_on</span>Hyderabad, India</span>
+              <span style="font-size:12px;color:#374151;background:#F3F4F6;padding:3px 10px;border-radius:999px">Technology / SaaS</span>
+            </div>
+          </div>
+        </div>
+        <h1 style="margin:0;font-family:Poppins;font-weight:600;font-size:clamp(28px,4vw,36px);letter-spacing:-0.02em;color:#1F2937">Senior Python Engineer</h1>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <div style="background:#F3F4F6;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+              <span style="font-family:'Material Symbols Rounded';font-size:22px;color:#B07A48">{{ s.icon }}</span>
+              <span style="display:flex;flex-direction:column"><span style="font-size:12px;color:#6B7280">{{ s.label }}</span><span style="font-size:14px;font-weight:600">{{ s.value }}</span></span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <section style="display:flex;flex-direction:column;gap:12px">
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:20px">About the Role</h2>
+        <p style="margin:0;font-size:16px;line-height:1.7;color:#4B5563;text-wrap:pretty">TechCorp builds the billing and subscription platform used by over 3,000 Indian SaaS businesses. We are looking for a Senior Python Engineer to own core services on our payments team, from API design through production reliability.</p>
+        <p style="margin:0;font-size:16px;line-height:1.7;color:#4B5563;text-wrap:pretty">You will work in a team of eight engineers, ship to production several times a day, and have a direct say in architecture. The role is hybrid, with three days a week at our Hitech City office.</p>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:12px">
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:20px">Key Responsibilities</h2>
+        <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ resp }}" as="r" hint-placeholder-count="3">
+            <li style="display:flex;gap:10px;font-size:16px;line-height:1.5;color:#374151"><span style="font-family:'Material Symbols Rounded';font-size:20px;color:#B07A48;flex:0 0 auto">arrow_upward</span>{{ r }}</li>
+          </sc-for>
+        </ul>
+        <button onClick="{{ toggleResp }}" style="align-self:flex-start;border:0;background:transparent;padding:0;color:#B07A48;font:inherit;font-size:14px;font-weight:600;cursor:pointer">{{ respLabel }}</button>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:12px">
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:20px">Skills Required</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{ req }}" as="k" hint-placeholder-count="5"><span style="background:#E9EDF3;color:#1F2937;padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500">{{ k }}</span></sc-for>
+        </div>
+      </section>
+      <section style="display:flex;flex-direction:column;gap:12px">
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:20px">Nice to Have</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{ nice }}" as="k" hint-placeholder-count="3"><span style="background:#ECE8E1;color:#1F2937;padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500">{{ k }}</span></sc-for>
+        </div>
+      </section>
+      <section style="display:flex;flex-direction:column;gap:8px">
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:20px">Experience Required</h2>
+        <p style="margin:0;font-size:16px;color:#4B5563">5+ years in backend development</p>
+      </section>
+    </main>
+
+    <aside style="flex:3 1 280px;min-width:0;display:flex;flex-direction:column;gap:16px;position:sticky;top:96px">
+      <sc-if value="{{ applied }}" hint-placeholder-val="{{ false }}">
+        <div style="height:48px;border-radius:12px;background:#E6F2EA;color:#2F5E48;font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:22px">check_circle</span>Application sent</div>
+      </sc-if>
+      <sc-if value="{{ notApplied }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ openApply }}" style="height:48px;border:0;border-radius:12px;background:#DCEFE4;color:#1F4D3A;font-family:Poppins;font-weight:600;font-size:17px;cursor:pointer" style-hover="background:#C7E3D3">Apply Now</button>
+      </sc-if>
+      <span style="font-size:13px;color:#6B7280;text-align:center;margin-top:-8px">Takes 2 minutes</span>
+      <div style="display:flex;gap:10px">
+        <button onClick="{{ toggleSave }}" style="flex:1;height:40px;border:1px solid #D9D3C9;border-radius:10px;background:#fff;color:#1F2937;font:inherit;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px"><span style="{{ heartStyle }}">favorite</span>{{ saveLabel }}</button>
+        <button onClick="{{ share }}" style="flex:1;height:40px;border:1px solid #D9D3C9;border-radius:10px;background:#fff;color:#1F2937;font:inherit;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px"><span style="font-family:'Material Symbols Rounded';font-size:20px">share</span>Share</button>
+      </div>
+      <div style="background:#F9FAFB;border:1px solid #ECE8E1;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:14px">
+        <span style="font-weight:700;font-size:16px">TechCorp</span>
+        <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#6B7280">Industry</span><span>Technology / SaaS</span></div>
+        <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#6B7280">Company size</span><span>100–500 employees</span></div>
+        <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#6B7280">Founded</span><span>2018</span></div>
+        <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#6B7280">Website</span><a href="#" style="color:#4A6490">www.company.com</a></div>
+      </div>
+    </aside>
+  </div>
+
+  <div style="max-width:1200px;width:100%;margin:0 auto;padding:0 24px 64px;display:flex;flex-wrap:wrap;gap:24px">
+    <section style="flex:2 1 520px;background:#FAF0DF;border-radius:12px;padding:32px;display:flex;gap:28px;flex-wrap:wrap">
+      <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:'Material Symbols Rounded';font-size:36px;color:#B07A48">auto_awesome</span>
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:20px;color:#8A5A2B">Why You're a Great Match</h2>
+        <span style="font-family:Poppins;font-weight:600;font-size:36px;color:#8A5A2B;line-height:1.1">85% Match</span>
+      </div>
+      <ul style="flex:1 1 280px;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px">
+        <sc-for list="{{ why }}" as="w" hint-placeholder-count="5">
+          <li style="display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.45;color:#1F2937"><span style="{{ w.iconStyle }}">{{ w.icon }}</span><span><strong style="font-weight:600">{{ w.skill }}</strong> · {{ w.note }}</span></li>
+        </sc-for>
+      </ul>
+    </section>
+    <section style="flex:1 1 280px;background:#fff;border-radius:12px;padding:28px;display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+      <span style="font-family:'Material Symbols Rounded';font-size:32px;color:#B07A48;font-variation-settings:'FILL' 1">star</span>
+      <h3 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px">Prepare for this role</h3>
+      <p style="margin:0;font-size:15px;color:#4B5563">Get AI feedback on your answers</p>
+      <a href="Mock Interview.dc.html" style="margin-top:auto;padding:12px 20px;border-radius:10px;background:#F6E1C3;color:#6B4423;font-weight:600;font-size:15px" style-hover="background:#F0D6B4;color:#6B4423">Start Mock Interview</a>
+    </section>
+  </div>
+
+  <sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(31,41,55,0.5);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px">
+      <div style="background:#fff;border-radius:12px;width:100%;max-width:480px;padding:28px;display:flex;flex-direction:column;gap:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:Poppins;font-weight:600;font-size:20px">Apply to TechCorp</span><span style="font-size:14px;color:#6B7280">Senior Python Engineer</span></div>
+          <button onClick="{{ closeApply }}" aria-label="Close" style="width:36px;height:36px;border:0;background:#F3F4F6;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:20px">close</span></button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:13px;font-weight:600">Resume</span>
+          <sc-for list="{{ resumes }}" as="r" hint-placeholder-count="2">
+            <button onClick="{{ r.pick }}" style="{{ r.style }}"><span style="font-family:'Material Symbols Rounded';font-size:20px;color:#B07A48">description</span>{{ r.name }}</button>
+          </sc-for>
+        </div>
+        <label style="display:flex;flex-direction:column;gap:8px">
+          <span style="font-size:13px;font-weight:600">Note to recruiter <span style="color:#9CA3AF;font-weight:400">(optional)</span></span>
+          <textarea value="{{ note }}" onChange="{{ onNote }}" rows="3" placeholder="A line on why this role fits you" style="border:1px solid #ECE8E1;border-radius:10px;padding:12px;font:inherit;font-size:14px;resize:vertical;outline-color:#B07A48"></textarea>
+        </label>
+        <button onClick="{{ submit }}" style="height:48px;border:0;border-radius:12px;background:#DCEFE4;color:#1F4D3A;font-family:Poppins;font-weight:600;font-size:16px;cursor:pointer" style-hover="background:#C7E3D3">Submit Application</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1F2937;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:60;display:flex;align-items:center;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:20px;color:#8FC3A8">check_circle</span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RESP = ['Design and build scalable Python services', 'Lead code reviews and mentor junior developers', 'Collaborate with product and design teams', 'Own reliability of payment APIs, including on-call rotation', 'Drive database schema and query performance work in PostgreSQL', 'Write technical design docs for new services', 'Improve CI/CD pipelines and test coverage', 'Help hire and onboard new engineers'];
+const I = "'Material Symbols Rounded'";
+class Component extends DCLogic {
+  state = { more: false, saved: false, applied: false, modal: new URLSearchParams(location.search).has('apply'), resume: 0, note: '', toast: '' };
+  componentWillUnmount() { clearTimeout(this.tt); }
+  toast(m) { clearTimeout(this.tt); this.setState({ toast: m }); this.tt = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    const s = this.state;
+    const tick = (ok, skill, note) => ({ skill, note, icon: ok ? 'check_circle' : 'error', iconStyle: { fontFamily: I, fontSize: 20, color: ok ? '#3F7A5E' : '#8A5A2B', fontVariationSettings: "'FILL' 1", flex: '0 0 auto' } });
+    return {
+      applied: s.applied, notApplied: !s.applied, modal: s.modal, note: s.note, toast: s.toast,
+      stats: [{ icon: 'work_history', label: 'Experience', value: '5+ years' }, { icon: 'schedule', label: 'Job type', value: 'Full-time' }, { icon: 'payments', label: 'Salary', value: '₹20-30 LPA' }, { icon: 'calendar_today', label: 'Posted', value: 'Posted 5 days ago' }],
+      resp: s.more ? RESP : RESP.slice(0, 3),
+      respLabel: s.more ? 'Show less' : `+ ${RESP.length - 3} more responsibilities`,
+      toggleResp: () => this.setState({ more: !s.more }),
+      req: ['Python', 'AWS', 'PostgreSQL', 'Django', 'Leadership'],
+      nice: ['Kubernetes', 'Redis', 'Microservices'],
+      why: [tick(1, 'Python (Advanced)', 'You have, They need'), tick(1, 'AWS (3 years experience)', 'You have, They need'), tick(1, 'Leadership experience', 'You have, They need'), tick(0, 'React', "Nice to have (You don't have)"), tick(0, 'Kubernetes', "Nice to have (You don't have)")],
+      saveLabel: s.saved ? 'Saved' : 'Save Job',
+      heartStyle: { fontFamily: I, fontSize: 20, color: s.saved ? '#D08A84' : '#1F2937', fontVariationSettings: `'FILL' ${s.saved ? 1 : 0}` },
+      toggleSave: () => { this.setState({ saved: !s.saved }); this.toast(s.saved ? 'Removed from saved jobs' : 'Job saved'); },
+      share: () => { try { navigator.clipboard.writeText(location.href); } catch (e) {} this.toast('Link copied to clipboard'); },
+      openApply: () => this.setState({ modal: true }),
+      closeApply: () => this.setState({ modal: false }),
+      onNote: e => this.setState({ note: e.target.value }),
+      resumes: ['Sairam_Kumar_Resume_2026.pdf', 'Resume_TechRole.pdf'].map((name, i) => ({ name, pick: () => this.setState({ resume: i }),
+        style: { display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 10, font: 'inherit', fontSize: 14, textAlign: 'left', cursor: 'pointer', background: s.resume === i ? '#FDF8EF' : '#fff', border: `1.5px solid ${s.resume === i ? '#B07A48' : '#ECE8E1'}`, color: '#1F2937' } })),
+      submit: () => { this.setState({ modal: false, applied: true }); this.toast('Application sent to TechCorp'); }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL@24,400,0..1" rel="stylesheet">
+<style>
+body{margin:0;background:#F9FAFB;color:#1F2937;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#B07A48;text-decoration:none}a:hover{color:#8A5A2B}
+*{box-sizing:border-box}
+@keyframes udRec{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.8)}}
+@keyframes udSpin{to{transform:rotate(360deg)}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <header style="background:#fff;border-bottom:1px solid #ECE8E1">
+    <div style="max-width:1200px;margin:0 auto;padding:14px 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px">
+      <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+        <span style="font-family:Poppins;font-weight:600;font-size:clamp(18px,2.4vw,24px)">Mock Interview Prep</span>
+        <span style="font-size:14px;color:#4B5563">Senior Python Engineer @ TechCorp</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;background:#F3F4F6;padding:8px 14px;border-radius:999px;font-size:14px;font-variant-numeric:tabular-nums"><span style="font-family:'Material Symbols Rounded';font-size:18px;color:#B07A48">timer</span>Interview time: <strong>{{ elapsed }}</strong></div>
+      <a href="Job Detail.dc.html" aria-label="Close" style="justify-self:end;width:40px;height:40px;border:1px solid #ECE8E1;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#1F2937"><span style="font-family:'Material Symbols Rounded';font-size:22px">close</span></a>
+    </div>
+  </header>
+
+  <sc-if value="{{ active }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1200px;width:100%;margin:0 auto;padding:28px 24px 64px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+      <main style="flex:1 1 480px;min-width:0;background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#6B7280;font-weight:600;text-transform:uppercase;letter-spacing:0.06em">Question {{ qNum }} of 5</span>
+          <span style="{{ qTimerStyle }}">{{ qRemaining }} remaining</span>
+        </div>
+        <h1 style="margin:0;font-family:Poppins;font-weight:600;font-size:20px;line-height:1.45;color:#1F2937;text-wrap:pretty">{{ question }}</h1>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <button onClick="{{ toggleRec }}" style="{{ recBtnStyle }}"><span style="font-family:'Material Symbols Rounded';font-size:20px">{{ micIcon }}</span>{{ recLabel }}</button>
+          <sc-if value="{{ recording }}"><span style="display:flex;align-items:center;gap:8px;font-size:13px;color:#B35A52;font-weight:600">{{ recDot }}Recording...</span></sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <textarea value="{{ answer }}" onChange="{{ onAnswer }}" disabled="{{ graded }}" placeholder="Type or speak your answer here..." style="min-height:220px;border:1px solid #ECE8E1;border-radius:12px;padding:16px;font:inherit;font-size:15px;line-height:1.6;resize:vertical;background:#F9FAFB;outline-color:#B07A48;color:#1F2937"></textarea>
+          <span style="align-self:flex-end;font-size:12px;color:#6B7280">{{ charCount }} / 500</span>
+        </div>
+        <sc-if value="{{ error }}"><div style="font-size:13px;color:#B35A52">{{ error }}</div></sc-if>
+        <div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+          <button onClick="{{ skip }}" style="height:46px;padding:0 20px;border-radius:10px;border:1px solid #D9D3C9;background:#fff;font:inherit;font-size:15px;font-weight:600;cursor:pointer;color:#1F2937">Skip Question</button>
+          <button onClick="{{ primary }}" disabled="{{ primaryDisabled }}" style="{{ primaryStyle }}">{{ spin }}{{ primaryLabel }}</button>
+        </div>
+
+        <sc-if value="{{ graded }}" hint-placeholder-val="{{ false }}">
+          <section style="background:#FAF0DF;border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:16px;color:#8A5A2B;display:flex;align-items:center;gap:6px"><span style="font-family:'Material Symbols Rounded';font-size:20px">auto_awesome</span>AI Feedback</h2><span style="font-family:Poppins;font-weight:600;font-size:26px;color:#1F2937">{{ fb.overall }}<span style="font-size:14px;color:#6B7280">/10</span></span></div>
+            <div style="background:#fff;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <sc-for list="{{ fb.bars }}" as="b" hint-placeholder-count="3">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;justify-content:space-between;font-size:13px"><span style="font-weight:500">{{ b.label }}</span><span style="font-weight:600">{{ b.score }}/10</span></div>
+                  <div style="height:8px;background:#F3F4F6;border-radius:999px;overflow:hidden"><div style="{{ b.fill }}"></div></div>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin:0;font-size:14px;line-height:1.6;color:#1F2937">{{ fb.feedback }}</p>
+            <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ fb.tips }}" as="t"><li style="display:flex;gap:8px;font-size:14px;line-height:1.45"><span style="{{ t.iconStyle }}">{{ t.icon }}</span>{{ t.text }}</li></sc-for>
+            </ul>
+          </section>
+        </sc-if>
+      </main>
+
+      <aside style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:16px">
+        <div style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:22px;display:flex;align-items:center;gap:18px">
+          <div style="position:relative;width:84px;height:84px;flex:0 0 auto">
+            <svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="34" fill="none" stroke="#F3F4F6" stroke-width="9"></circle><circle cx="42" cy="42" r="34" fill="none" stroke="#B07A48" stroke-width="9" stroke-linecap="round" stroke-dasharray="{{ ringDash }}" transform="rotate(-90 42 42)"></circle></svg>
+            <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:Poppins;font-weight:600;font-size:17px;color:#1F2937">{{ progressPct }}</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <span style="font-family:Poppins;font-weight:600;font-size:15px">Question {{ qNum }} of 5</span>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px"><sc-for list="{{ segs }}" as="g" hint-placeholder-count="5"><span style="{{ g }}"></span></sc-for></div>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:10px;font-size:14px">
+          <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#6B7280">Role</span><span style="font-weight:500">Senior Python Engineer</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#6B7280">Company</span><span style="font-weight:500">TechCorp</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px"><span style="color:#6B7280">Interview Type</span><span style="font-weight:500">Technical Round</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><span style="color:#6B7280">Difficulty</span><span style="background:#FAF0DF;color:#6B4423;font-weight:600;font-size:12px;padding:3px 10px;border-radius:999px">Medium</span></div>
+        </div>
+        <div style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:10px">
+          <h3 style="margin:0;font-family:Poppins;font-weight:600;font-size:16px">Interview Tips</h3>
+          <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.5;color:#374151">
+            <li>Speak clearly and at a moderate pace</li><li>Provide specific examples from your experience</li><li>Ask clarifying questions if needed</li><li>Show enthusiasm about the role</li>
+          </ul>
+        </div>
+        <div style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:8px;font-size:14px">
+          <div style="display:flex;justify-content:space-between"><span style="color:#6B7280">Total interview</span><span>~15 minutes</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:#6B7280">You've spent</span><span>{{ spentMin }}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:#6B7280">Remaining</span><span>{{ remainMin }}</span></div>
+        </div>
+      </aside>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ done }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:960px;width:100%;margin:0 auto;padding:40px 24px 64px;display:flex;flex-direction:column;gap:24px">
+      <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="width:56px;height:56px;border-radius:50%;background:#E6F2EA;display:flex;align-items:center;justify-content:center;flex:0 0 auto"><span style="font-family:'Material Symbols Rounded';font-size:32px;color:#3F7A5E">emoji_events</span></span>
+          <h1 style="margin:0;font-family:Poppins;font-weight:600;font-size:24px;color:#3F7A5E">Interview Complete!</h1>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+          <sc-for list="{{ summary }}" as="m" hint-placeholder-count="5">
+            <div style="background:#F9FAFB;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;color:#6B7280">{{ m.k }}</span><span style="font-family:Poppins;font-weight:600;font-size:17px">{{ m.v }}</span></div>
+          </sc-for>
+        </div>
+      </section>
+      <section style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;gap:20px">
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:20px">Performance Summary</h2>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(8px,3vw,28px);align-items:end;height:200px;border-bottom:1px solid #ECE8E1;padding:0 8px">
+          <sc-for list="{{ bars }}" as="b" hint-placeholder-count="5">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end">
+              <span style="font-size:13px;font-weight:600">{{ b.label }}</span>
+              <div style="{{ b.style }}"></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(8px,3vw,28px);padding:0 8px;margin-top:-12px;text-align:center;font-size:12px;color:#6B7280"><span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span><span>Q5</span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+          <div style="background:#F1F7F3;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px"><span style="font-weight:700;font-size:14px;color:#2F5E48">Top strengths</span><span style="font-size:14px;line-height:1.55">{{ strengths }}</span></div>
+          <div style="background:#FDF8EF;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px"><span style="font-weight:700;font-size:14px;color:#6B4423">Areas to improve</span><span style="font-size:14px;line-height:1.55">{{ improve }}</span></div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="Job Detail.dc.html?apply=1" style="padding:14px 24px;border-radius:10px;background:#DCEFE4;color:#1F4D3A;font-weight:700;font-size:16px" style-hover="background:#C7E3D3;color:#1F4D3A">Apply to This Job</a>
+          <button onClick="{{ restart }}" style="padding:14px 22px;border-radius:10px;border:1px solid #D9D3C9;background:#fff;font:inherit;font-weight:600;font-size:15px;cursor:pointer;color:#1F2937">Practice Again</button>
+          <a href="Candidate Dashboard.dc.html" style="padding:14px 22px;border-radius:10px;border:1px solid #D9D3C9;color:#1F2937;font-weight:600;font-size:15px">Practice Another Role</a>
+        </div>
+      </section>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const I = "'Material Symbols Rounded'";
+const QS = [
+  "Tell me about your experience with Python and how you've used it in production environments",
+  'How would you design a payments API that stays reliable during a 10x traffic spike?',
+  'Walk me through how you debugged the hardest production incident you have faced.',
+  'How do you mentor junior developers and give feedback on their code?',
+  'Describe an AWS architecture you built. What trade-offs did you make?'
+];
+const mmss = t => `${String(Math.floor(t / 60)).padStart(2, '0')}:${String(t % 60).padStart(2, '0')}`;
+const color = v => v >= 8 ? '#8FC3A8' : v >= 6 ? '#E3C08A' : '#D08A84';
+class Component extends DCLogic {
+  state = { qi: 0, answer: '', results: [], current: null, grading: false, elapsed: 0, qLeft: 120, rec: false, done: false, error: '' };
+  componentDidMount() { this.t = setInterval(() => { if (!this.state.done) this.setState(s => ({ elapsed: s.elapsed + 1, qLeft: s.current ? s.qLeft : Math.max(0, s.qLeft - 1) })); }, 1000); }
+  componentWillUnmount() { clearInterval(this.t); }
+  async grade() {
+    const s = this.state;
+    this.setState({ grading: true, error: '' });
+    const prompt = `You are an interview coach grading a candidate's answer in a mock technical interview for a Senior Python Engineer role at TechCorp (fintech SaaS, India).
+Question: ${QS[s.qi]}
+Answer: ${s.answer}
+Score strictly and honestly on a 0-10 scale (short or vague answers should score low). Respond with JSON only:
+{"clarity": n, "depth": n, "communication": n, "feedback": "2 sentences addressed to the candidate", "strength": "one short thing they did well", "improvements": ["short suggestion", "short suggestion"]}`;
+    try {
+      const txt = await window.claude.complete(prompt);
+      const j = JSON.parse(txt.slice(txt.indexOf('{'), txt.lastIndexOf('}') + 1));
+      const c = [j.clarity, j.depth, j.communication].map(n => Math.max(0, Math.min(10, +n || 0)));
+      const r = { clarity: c[0], depth: c[1], communication: c[2], overall: +((c[0] + c[1] + c[2]) / 3).toFixed(1), feedback: j.feedback, strength: j.strength, improvements: j.improvements || [] };
+      this.setState({ current: r, grading: false });
+    } catch (e) { this.setState({ grading: false, error: 'AI feedback is unavailable right now. Try again, or skip this question.' }); }
+  }
+  advance(result) {
+    const s = this.state, results = [...s.results, result];
+    if (s.qi === 4) this.setState({ results, done: true, current: null, answer: '', rec: false });
+    else this.setState({ results, qi: s.qi + 1, current: null, answer: '', qLeft: 120, error: '' });
+    window.scrollTo(0, 0);
+  }
+  renderVals() {
+    const s = this.state, cur = s.current, low = s.qLeft < 30;
+    const answered = s.results.filter(Boolean);
+    const avg = k => answered.length ? answered.reduce((a, r) => a + r[k], 0) / answered.length : 0;
+    const cats = [['Clarity', 'clarity'], ['Technical Depth', 'depth'], ['Communication', 'communication']].map(([n, k]) => ({ n, v: avg(k) })).sort((a, b) => b.v - a.v);
+    const primaryDisabled = s.grading || (!cur && s.answer.trim().length < 10);
+    return {
+      active: !s.done, done: s.done, qNum: s.qi + 1, question: QS[s.qi], answer: s.answer, charCount: s.answer.length, graded: !!cur, error: s.error,
+      elapsed: mmss(s.elapsed), qRemaining: mmss(s.qLeft).replace(/^0/, ''),
+      qTimerStyle: { fontSize: 14, fontWeight: 600, color: low ? '#B35A52' : '#3F7A5E', fontVariantNumeric: 'tabular-nums' },
+      recording: s.rec, recLabel: s.rec ? 'Stop recording' : 'Answer by voice', micIcon: s.rec ? 'mic_off' : 'mic',
+      recBtnStyle: { display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 999, font: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', border: `1.5px solid ${s.rec ? '#B35A52' : '#ECE8E1'}`, background: s.rec ? '#FEF2F2' : '#fff', color: s.rec ? '#B35A52' : '#1F2937' },
+      recDot: React.createElement('span', { style: { width: 10, height: 10, borderRadius: '50%', background: '#B35A52', animation: 'udRec 1.2s ease-in-out infinite' } }),
+      toggleRec: () => this.setState({ rec: !s.rec }),
+      onAnswer: e => this.setState({ answer: e.target.value.slice(0, 500) }),
+      primaryLabel: s.grading ? 'Scoring your answer…' : cur ? (s.qi === 4 ? 'Finish Interview →' : 'Next Question →') : 'Submit Answer',
+      primaryDisabled,
+      primaryStyle: { height: 46, padding: '0 24px', borderRadius: 10, border: 0, background: primaryDisabled ? '#EEF3F0' : '#DCEFE4', color: primaryDisabled ? '#9CA3AF' : '#1F4D3A', font: 'inherit', fontSize: 15, fontWeight: 700, cursor: primaryDisabled ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: 8 },
+      spin: s.grading ? React.createElement('span', { style: { width: 16, height: 16, borderRadius: '50%', border: '2px solid #C7E3D3', borderTopColor: '#1F4D3A', animation: 'udSpin .8s linear infinite', display: 'inline-block' } }) : null,
+      primary: () => { if (cur) this.advance(cur); else this.grade(); },
+      skip: () => this.advance(null),
+      fb: cur ? {
+        overall: cur.overall, feedback: cur.feedback,
+        bars: [['Clarity', cur.clarity], ['Technical Depth', cur.depth], ['Communication', cur.communication]].map(([label, score]) => ({ label, score, fill: { height: '100%', width: `${score * 10}%`, background: color(score), borderRadius: 999 } })),
+        tips: [{ text: cur.strength, icon: 'check', c: '#3F7A5E' }, ...cur.improvements.map(t => ({ text: t, icon: 'arrow_upward', c: '#8A5A2B' }))].filter(t => t.text).map(t => ({ ...t, iconStyle: { fontFamily: I, fontSize: 18, color: t.c, flex: '0 0 auto' } }))
+      } : { bars: [], tips: [] },
+      progressPct: `${(s.qi + 1) * 20}%`, ringDash: `${213.6 * (s.qi + 1) / 5} 213.6`,
+      segs: [0, 1, 2, 3, 4].map(i => ({ height: 6, borderRadius: 999, background: i < s.qi ? '#B07A48' : i === s.qi ? '#E3C08A' : '#F3F4F6' })),
+      spentMin: `${Math.floor(s.elapsed / 60)} minutes`, remainMin: `~${Math.max(0, 15 - Math.floor(s.elapsed / 60))} minutes`,
+      summary: [
+        { k: 'Questions answered', v: `${answered.length}/5 ✓` }, { k: 'Average score', v: answered.length ? `${(answered.reduce((a, r) => a + r.overall, 0) / answered.length).toFixed(1)}/10` : '—' },
+        { k: 'Time taken', v: `${Math.max(1, Math.round(s.elapsed / 60))} minutes` },
+        { k: 'Best performance', v: answered.length ? `${cats[0].n} (${cats[0].v.toFixed(1)}/10)` : '—' },
+        { k: 'Area to improve', v: answered.length ? `${cats[2].n} (${cats[2].v.toFixed(1)}/10)` : '—' }
+      ],
+      bars: [0, 1, 2, 3, 4].map(i => { const r = s.results[i]; return { label: r ? r.overall : 'Skipped', style: { width: '100%', maxWidth: 64, height: r ? `${Math.max(4, r.overall * 14)}px` : '4px', background: r ? color(r.overall) : '#ECE8E1', borderRadius: '8px 8px 0 0' } }; }),
+      strengths: answered.map(r => r.strength).filter(Boolean).slice(0, 3).join(' · ') || 'Answer a few questions to see strengths.',
+      improve: [...answered].sort((a, b) => a.overall - b.overall).slice(0, 2).map(r => r.improvements[0]).filter(Boolean).join(' · ') || '—',
+      restart: () => this.setState({ qi: 0, answer: '', results: [], current: null, elapsed: 0, qLeft: 120, done: false, error: '' })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL@24,400,0..1" rel="stylesheet">
+<style>
+body{margin:0;background:#F9FAFB;color:#1F2937;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#B07A48;text-decoration:none}a:hover{color:#8A5A2B}
+*{box-sizing:border-box}
+@keyframes udPulse{0%{box-shadow:0 0 0 0 rgba(176,122,72,.5)}70%{box-shadow:0 0 0 10px rgba(176,122,72,0)}100%{box-shadow:0 0 0 0 rgba(176,122,72,0)}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <header style="background:#fff;border-bottom:1px solid #ECE8E1;position:sticky;top:0;z-index:30">
+    <div style="padding:12px 20px;display:flex;align-items:center;gap:16px">
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:40px;height:40px;border:1px solid #ECE8E1;border-radius:10px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:22px;color:#1F2937">menu</span></button>
+      </sc-if>
+      <a href="Landing Page.dc.html" style="display:flex;align-items:center;gap:10px;flex:0 0 auto">
+        <div style="width:34px;height:34px;border-radius:10px;background:#1F2937;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';color:#E3C08A;font-size:22px">north_east</span></div>
+        <span style="font-family:Poppins;font-weight:600;font-size:20px;color:#1F2937;letter-spacing:-0.02em">udda<span style="color:#B07A48">ya</span></span>
+      </a>
+      <label style="flex:1 1 auto;max-width:520px;margin:0 auto;display:flex;align-items:center;gap:10px;background:#F9FAFB;border:1px solid #ECE8E1;border-radius:12px;padding:0 14px;height:42px">
+        <span style="font-family:'Material Symbols Rounded';font-size:20px;color:#9CA3AF">search</span>
+        <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Find more jobs" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:14px;color:#1F2937">
+      </label>
+      <div style="position:relative">
+        <button onClick="{{ toggleBell }}" aria-label="Notifications" style="width:42px;height:42px;border:1px solid #ECE8E1;border-radius:12px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative"><span style="font-family:'Material Symbols Rounded';font-size:22px;color:#1F2937">notifications</span><sc-if value="{{ hasUnread }}"><span style="position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:#F6E1C3;border:2px solid #fff"></span></sc-if></button>
+        <sc-if value="{{ bellOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;right:0;top:50px;width:320px;background:#fff;border:1px solid #ECE8E1;border-radius:10px;box-shadow:0 16px 40px rgba(31,41,55,0.14);padding:8px;z-index:40">
+            <div style="padding:8px 10px;font-family:Poppins;font-weight:600;font-size:15px">Notifications</div>
+            <sc-for list="{{ notes }}" as="n" hint-placeholder-count="3">
+              <a href="{{ n.href }}" style="display:flex;gap:10px;padding:10px;border-radius:10px;color:#1F2937" style-hover="background:#FDF8EF;color:#1F2937">
+                <span style="font-family:'Material Symbols Rounded';font-size:20px;color:#B07A48">{{ n.icon }}</span>
+                <span style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:500">{{ n.text }}</span><span style="font-size:12px;color:#6B7280">{{ n.time }}</span></span>
+              </a>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      <div style="position:relative">
+        <button onClick="{{ toggleUser }}" style="display:flex;align-items:center;gap:8px;border:1px solid #ECE8E1;border-radius:12px;background:#fff;cursor:pointer;padding:4px 10px 4px 4px;height:42px">
+          <span style="width:32px;height:32px;border-radius:9px;background:#FAF0DF;color:#6B4423;font-family:Poppins;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">SK</span>
+          <span style="font-family:'Material Symbols Rounded';font-size:20px;color:#6B7280">expand_more</span>
+        </button>
+        <sc-if value="{{ userOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;right:0;top:50px;width:220px;background:#fff;border:1px solid #ECE8E1;border-radius:10px;box-shadow:0 16px 40px rgba(31,41,55,0.14);padding:6px;z-index:40;display:flex;flex-direction:column">
+            <a href="Profile.dc.html" style="padding:10px 12px;border-radius:8px;color:#1F2937;font-size:14px" style-hover="background:#F9FAFB;color:#1F2937">My Profile</a>
+            <a href="Applications.dc.html" style="padding:10px 12px;border-radius:8px;color:#1F2937;font-size:14px" style-hover="background:#F9FAFB;color:#1F2937">My Applications</a>
+            <a href="Recruiter Dashboard.dc.html" style="padding:10px 12px;border-radius:8px;color:#1F2937;font-size:14px" style-hover="background:#F9FAFB;color:#1F2937">Switch to Recruiter</a>
+            <a href="Landing Page.dc.html" style="padding:10px 12px;border-radius:8px;color:#B91C1C;font-size:14px;border-top:1px solid #F3F4F6" style-hover="background:#FEF2F2;color:#B91C1C">Log out</a>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </header>
+
+  <div style="display:flex;flex:1;align-items:stretch">
+    <sc-if value="{{ showSide }}" hint-placeholder-val="{{ true }}">
+      <aside style="{{ sideStyle }}">
+        <nav style="display:flex;flex-direction:column;gap:4px">
+          <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+            <a href="{{ n.href }}" onClick="{{ n.onClick }}" style="{{ n.style }}">
+              <span style="font-family:'Material Symbols Rounded';font-size:20px">{{ n.icon }}</span>{{ n.label }}
+            </a>
+          </sc-for>
+        </nav>
+        <a href="Profile.dc.html" style="margin-top:auto;display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:#fff;border:1px solid #ECE8E1;color:#1F2937" style-hover="border-color:#B07A48;color:#1F2937">
+          <span style="width:40px;height:40px;border-radius:50%;background:#FAF0DF;color:#6B4423;font-family:Poppins;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center">SK</span>
+          <span style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14px">Sairam Kumar</span><span style="font-size:12px;color:#B07A48;font-weight:500">View Profile</span></span>
+        </a>
+      </aside>
+    </sc-if>
+    <sc-if value="{{ overlay }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ toggleMenu }}" style="position:fixed;inset:0;background:rgba(31,41,55,0.35);z-index:20"></div>
+    </sc-if>
+
+    <div style="flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:24px;padding:28px 24px;align-content:flex-start">
+      <main style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <h1 style="margin:0;font-family:Poppins;font-weight:600;font-size:28px;letter-spacing:-0.02em">Good morning, Sairam</h1>
+          <p style="margin:0;color:#4B5563;font-size:15px">3 new jobs match your skills since yesterday.</p>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:14px">
+          <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px">Recommended For You</h2>
+          <div style="background:#FBF9F5;border:1px solid #EFDDBC;border-radius:12px;padding:28px;display:flex;gap:24px;flex-wrap:wrap;align-items:center">
+            <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:40px;height:40px;border-radius:10px;background:#1F2937;color:#fff;font-family:Poppins;font-weight:600;display:flex;align-items:center;justify-content:center">T</div>
+                <div style="display:flex;flex-direction:column"><span style="font-weight:600;font-size:15px">TechCorp</span><span style="font-size:13px;color:#4B5563">Hyderabad · Hybrid</span></div>
+              </div>
+              <a href="Job Detail.dc.html" style="font-family:Poppins;font-weight:600;font-size:24px;color:#1F2937;letter-spacing:-0.01em" style-hover="color:#B07A48">Senior Python Engineer</a>
+              <div style="font-size:15px;font-weight:600;color:#8A5A2B">₹20–30 LPA</div>
+              <div style="font-size:13px;color:#4B5563">Python (Advanced) • AWS (3 yrs) • Leadership</div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+                <a href="Job Detail.dc.html?apply=1" style="padding:12px 22px;border-radius:10px;background:#DCEFE4;color:#1F4D3A;font-weight:600;font-size:15px" style-hover="background:#C7E3D3;color:#1F4D3A">Apply Now</a>
+                <button onClick="{{ saveFeatured }}" style="padding:12px 20px;border-radius:10px;background:#fff;border:1px solid #D9D3C9;color:#1F2937;font:inherit;font-weight:600;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:6px"><span style="{{ featuredHeartStyle }}">favorite</span>{{ featuredSaveLabel }}</button>
+              </div>
+            </div>
+            <span style="align-self:flex-start;flex:0 0 auto;font-family:Poppins;font-weight:600;font-size:15px;color:#6B4423;background:#F6E1C3;padding:8px 14px;border-radius:999px">87% Match</span>
+          </div>
+        </section>
+
+        <section id="jobs" style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+            <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px">{{ gridTitle }}</h2>
+            <sc-if value="{{ filtering }}"><button onClick="{{ clearFilter }}" style="border:0;background:transparent;color:#B07A48;font:inherit;font-size:14px;font-weight:600;cursor:pointer">Show all jobs</button></sc-if>
+          </div>
+          <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:40px;text-align:center;background:#fff;border:1px dashed #ECE8E1;border-radius:10px;color:#4B5563;font-size:15px">No jobs match “{{ q }}”. Try a different skill or title.</div>
+          </sc-if>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px">
+            <sc-for list="{{ jobs }}" as="j" hint-placeholder-count="8">
+              <div onMouseEnter="{{ j.enter }}" onMouseLeave="{{ j.leave }}" style="{{ j.cardStyle }}">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+                  <div style="width:40px;height:40px;border-radius:10px;background:{{ j.logoBg }};color:#fff;font-family:Poppins;font-weight:600;display:flex;align-items:center;justify-content:center">{{ j.initial }}</div>
+                  <span style="background:#F6E1C3;color:#6B4423;font-size:12px;font-weight:600;padding:4px 9px;border-radius:999px">{{ j.match }}% Match</span>
+                </div>
+                <a href="Job Detail.dc.html" style="font-family:Poppins;font-weight:600;font-size:16px;color:#1F2937;line-height:1.3" style-hover="color:#B07A48">{{ j.title }}</a>
+                <div style="font-size:14px;color:#4B5563">{{ j.company }} · {{ j.loc }}</div>
+                <div style="font-size:14px;color:#8A5A2B;font-weight:600">{{ j.salary }}</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:6px">
+                  <button onClick="{{ j.apply }}" style="{{ j.applyStyle }}">{{ j.applyLabel }}</button>
+                  <button onClick="{{ j.save }}" aria-label="Save job" style="width:36px;height:36px;border:0;background:transparent;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#FEF2F2"><span style="{{ j.heartStyle }}">favorite</span></button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:14px">
+          <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px">Your Activity</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
+            <a href="Applications.dc.html" style="background:#fff;border:1px solid #ECE8E1;border-radius:10px;padding:20px;display:flex;align-items:center;gap:14px;color:#1F2937" style-hover="border-color:#8FC3A8;color:#1F2937">
+              <span style="width:auto;height:auto;border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:24px;color:#3F7A5E">trending_up</span></span>
+              <span style="display:flex;flex-direction:column"><span style="font-family:Poppins;font-weight:600;font-size:28px;color:#3F7A5E;line-height:1.1">{{ appCount }}</span><span style="font-size:14px;color:#4B5563">Applications</span></span>
+            </a>
+            <a href="Applications.dc.html" style="background:#fff;border:1px solid #ECE8E1;border-radius:10px;padding:20px;display:flex;align-items:center;gap:14px;color:#1F2937" style-hover="border-color:#8FC3A8;color:#1F2937">
+              <span style="width:auto;height:auto;border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:24px;color:#3F7A5E">event</span></span>
+              <span style="display:flex;flex-direction:column"><span style="font-family:Poppins;font-weight:600;font-size:28px;color:#3F7A5E;line-height:1.1">2</span><span style="font-size:14px;color:#4B5563">Interviews Scheduled</span></span>
+            </a>
+            <a href="Applications.dc.html" style="background:#fff;border:1px solid #ECE8E1;border-radius:10px;padding:20px;display:flex;align-items:center;gap:14px;color:#1F2937" style-hover="border-color:#E3C08A;color:#1F2937">
+              <span style="width:auto;height:auto;border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:24px;color:#8A5A2B">task_alt</span></span>
+              <span style="display:flex;flex-direction:column"><span style="font-family:Poppins;font-weight:600;font-size:28px;color:#8A5A2B;line-height:1.1">1</span><span style="font-size:14px;color:#4B5563">Offer Received</span></span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <aside style="flex:1 1 260px;max-width:100%;display:flex;flex-direction:column;gap:20px">
+        <div style="background:#fff;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:18px">
+          <h3 style="margin:0;font-family:Poppins;font-weight:600;font-size:17px">Complete Your Profile</h3>
+          <div style="display:flex;align-items:center;gap:18px">
+            <svg width="96" height="96" viewBox="0 0 96 96" style="flex:0 0 auto"><circle cx="48" cy="48" r="40" fill="none" stroke="#F3F4F6" stroke-width="10"></circle><circle cx="48" cy="48" r="40" fill="none" stroke="#B07A48" stroke-width="10" stroke-linecap="round" stroke-dasharray="213.6 251.3" transform="rotate(-90 48 48)"></circle><text x="48" y="54" text-anchor="middle" font-family="Poppins" font-weight="700" font-size="20" fill="#1F2937">85%</text></svg>
+            <div style="font-size:14px;color:#4B5563;line-height:1.5">Profile 85% Complete</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:#1F2937">
+                <span style="{{ s.iconStyle }}">{{ s.icon }}</span>{{ s.label }}
+              </div>
+            </sc-for>
+          </div>
+          <a href="Profile.dc.html" style="padding:12px;border-radius:10px;background:#DCEFE4;color:#1F4D3A;font-weight:600;font-size:15px;text-align:center" style-hover="background:#C7E3D3;color:#1F4D3A">Complete Now</a>
+        </div>
+        <div style="background:#FBF9F5;border-radius:12px;padding:24px;color:#6B4423;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">{{ pulse }}Live</div>
+          <div style="font-family:Poppins;font-weight:600;font-size:40px;letter-spacing:-0.02em;line-height:1.1">{{ counter }}</div>
+          <div style="font-size:15px;color:#6B4423">Candidates Onboarded</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1F2937;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;box-shadow:0 12px 30px rgba(31,41,55,0.3);z-index:50;display:flex;align-items:center;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:20px;color:#8FC3A8">check_circle</span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const JOBS = [
+  { title: 'Backend Engineer, Payments', company: 'Razorleaf', loc: 'Bengaluru', salary: '₹18–26 LPA', match: 84, bg: '#1F2937' },
+  { title: 'Full Stack Developer', company: 'Startup XYZ', loc: 'Remote', salary: '₹14–22 LPA', match: 81, bg: '#8A5A2B' },
+  { title: 'DevOps Engineer', company: 'CloudSoft', loc: 'Pune', salary: '₹16–24 LPA', match: 78, bg: '#4F7F68' },
+  { title: 'Python Developer, Data', company: 'Datanest', loc: 'Hyderabad', salary: '₹15–21 LPA', match: 76, bg: '#374151' },
+  { title: 'Staff Engineer, Platform', company: 'Kiranaverse', loc: 'Mumbai', salary: '₹35–45 LPA', match: 72, bg: '#B07A48' },
+  { title: 'Django Developer', company: 'Mitra Health', loc: 'Chennai', salary: '₹12–18 LPA', match: 71, bg: '#1F2937' },
+  { title: 'Engineering Lead, APIs', company: 'Yatra Labs', loc: 'Delhi NCR', salary: '₹30–40 LPA', match: 69, bg: '#2F5E48' },
+  { title: 'Cloud Engineer (AWS)', company: 'Sthir Systems', loc: 'Hyderabad', salary: '₹20–28 LPA', match: 67, bg: '#6B4423' },
+  { title: 'Node.js Engineer', company: 'Pravah', loc: 'Remote', salary: '₹14–20 LPA', match: 64, bg: '#4B5563' },
+  { title: 'Senior React Developer', company: 'Kalam EdTech', loc: 'Bengaluru', salary: '₹22–30 LPA', match: 62, bg: '#8A5A2B' }
+];
+const ICON = "font-family:'Material Symbols Rounded';";
+class Component extends DCLogic {
+  state = { w: window.innerWidth, menu: false, bell: false, user: false, q: new URLSearchParams(location.search).get('q') || '', saved: {}, applied: {}, hover: -1, featSaved: false, savedOnly: false, toast: '', n: 12450, unread: true };
+  componentDidMount() {
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    window.addEventListener('resize', this.onResize);
+    this.t = setInterval(() => { if (Math.random() < 0.4) this.setState(s => ({ n: s.n + 1 })); }, 2500);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); clearInterval(this.t); clearTimeout(this.tt); }
+  toast(msg) { clearTimeout(this.tt); this.setState({ toast: msg }); this.tt = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    const s = this.state, narrow = s.w < 1024;
+    const q = s.q.trim().toLowerCase();
+    let list = JOBS.map((j, i) => ({ ...j, i }));
+    if (q) list = list.filter(j => (j.title + ' ' + j.company + ' ' + j.loc).toLowerCase().includes(q));
+    if (s.savedOnly) list = list.filter(j => s.saved[j.i]);
+    const navItem = (icon, label, href, active, onClick) => ({ icon, label, href, onClick: onClick || (() => this.setState({ menu: false })),
+      style: `display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;font-size:15px;font-weight:${active ? 600 : 500};color:${active ? '#6B4423' : '#374151'};background:${active ? '#FAF0DF' : 'transparent'};` });
+    const toStyle = str => Object.fromEntries(str.split(';').filter(Boolean).map(p => { const k = p.slice(0, p.indexOf(':')).trim(); return [k.replace(/-([a-z])/g, (_, c) => c.toUpperCase()), p.slice(p.indexOf(':') + 1).trim()]; }));
+    const nav = [
+      navItem('home', 'Dashboard', '#', !s.savedOnly, e => { e.preventDefault(); this.setState({ savedOnly: false, menu: false }); }),
+      navItem('search', 'Explore Jobs', '#jobs', false),
+      navItem('work', 'My Applications', 'Applications.dc.html', false),
+      navItem('favorite', 'Saved Jobs', '#jobs', s.savedOnly, () => this.setState({ savedOnly: true, menu: false })),
+      navItem('star', 'Interview Prep', 'Mock Interview.dc.html', false),
+      navItem('chat', 'Messages', '#', false, e => { e.preventDefault(); this.setState({ menu: false }); this.toast('No new messages'); }),
+      navItem('person', 'Profile', 'Profile.dc.html', false)
+    ].map(n => ({ ...n, style: toStyle(n.style) }));
+    const sideBase = 'width:240px;flex:0 0 240px;background:#F3F4F6;border-right:1px solid #ECE8E1;padding:20px 14px;display:flex;flex-direction:column;gap:20px;';
+    const sideStyle = toStyle(narrow ? sideBase + 'position:fixed;top:0;bottom:0;left:0;z-index:25;padding-top:80px;box-shadow:8px 0 30px rgba(31,41,55,0.2);' : sideBase + 'position:sticky;top:67px;height:calc(100vh - 67px);');
+    const jobs = list.map(j => {
+      const hov = s.hover === j.i, ap = s.applied[j.i], sv = s.saved[j.i];
+      return {
+        ...j, initial: j.company[0], logoBg: j.bg,
+        enter: () => this.setState({ hover: j.i }), leave: () => this.setState({ hover: -1 }),
+        cardStyle: { background: '#fff', border: '1px solid #EEEAE3', borderRadius: 10, padding: 18, display: 'flex', flexDirection: 'column', gap: 8, transition: 'transform .2s, box-shadow .2s', transform: 'none', boxShadow: 'none' },
+        applyLabel: ap ? 'Applied ✓' : 'Quick Apply',
+        applyStyle: { padding: '8px 14px', borderRadius: 8, border: 0, font: 'inherit', fontSize: 13, fontWeight: 600, cursor: ap ? 'default' : 'pointer', background: ap ? '#EEF6F1' : '#DCEFE4', color: '#1F4D3A', opacity: hov || ap ? 1 : 0, transition: 'opacity .15s' },
+        apply: () => { if (ap) return; this.setState(p => ({ applied: { ...p.applied, [j.i]: true } })); this.toast(`Applied to ${j.title} at ${j.company}`); },
+        save: () => { this.setState(p => ({ saved: { ...p.saved, [j.i]: !p.saved[j.i] } })); this.toast(sv ? 'Removed from saved jobs' : 'Saved to your list'); },
+        heartStyle: toStyle(ICON + `font-size:22px;color:${sv ? '#D08A84' : '#9CA3AF'};font-variation-settings:'FILL' ${sv ? 1 : 0};`)
+      };
+    });
+    const done = i => ({ icon: i ? 'check_circle' : 'radio_button_unchecked', iconStyle: toStyle(ICON + `font-size:20px;color:${i ? '#8FC3A8' : '#D1D5DB'};font-variation-settings:'FILL' ${i ? 1 : 0};`) });
+    return {
+      q: s.q, narrow, bellOpen: s.bell, userOpen: s.user, hasUnread: s.unread, toast: s.toast,
+      showSide: !narrow || s.menu, overlay: narrow && s.menu, sideStyle, nav, jobs,
+      empty: jobs.length === 0 && !!q, filtering: !!q || s.savedOnly,
+      gridTitle: s.savedOnly ? 'Saved Jobs' : q ? `Results for “${s.q}”` : 'Other Opportunities for You',
+      appCount: 12 + Object.keys(s.applied).length,
+      counter: s.n.toLocaleString('en-IN'),
+      pulse: React.createElement('span', { style: { width: 8, height: 8, borderRadius: '50%', background: '#B07A48', animation: 'udPulse 1.8s infinite' } }),
+      featuredSaveLabel: s.featSaved ? 'Saved' : 'Save Job',
+      featuredHeartStyle: toStyle(ICON + `font-size:20px;color:${s.featSaved ? '#D08A84' : '#1F2937'};font-variation-settings:'FILL' ${s.featSaved ? 1 : 0};`),
+      saveFeatured: () => { this.setState(p => ({ featSaved: !p.featSaved })); this.toast(s.featSaved ? 'Removed from saved jobs' : 'Saved to your list'); },
+      steps: [['Basic Info', 1], ['Experience', 1], ['Skills', 1], ['Resume', 1], ['Certifications', 0]].map(([label, d]) => ({ label, ...done(d) })),
+      notes: [
+        { icon: 'event', text: 'TechCorp interview on Sept 30, 2 PM', time: '1 hour ago', href: 'Applications.dc.html' },
+        { icon: 'workspace_premium', text: 'You received an offer from TechCorp', time: 'Yesterday', href: 'Applications.dc.html' },
+        { icon: 'bolt', text: '3 new jobs match your skills', time: '2 days ago', href: '#jobs' }
+      ],
+      onQ: e => this.setState({ q: e.target.value }),
+      clearFilter: () => this.setState({ q: '', savedOnly: false }),
+      toggleMenu: () => this.setState(p => ({ menu: !p.menu })),
+      toggleBell: () => this.setState(p => ({ bell: !p.bell, user: false, unread: false })),
+      toggleUser: () => this.setState(p => ({ user: !p.user, bell: false }))
+    };
+  }
+}
+</script>
+</body>
+</html>

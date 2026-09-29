@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL@24,400,0" rel="stylesheet">
+<style>
+body{margin:0;background:#F9FAFB;color:#1F2937;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#B07A48;text-decoration:none}a:hover{color:#8A5A2B}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <header style="background:#fff;border-bottom:1px solid #ECE8E1;position:sticky;top:0;z-index:10">
+    <div style="max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <a href="Landing Page.dc.html" style="display:flex;align-items:center;gap:10px;color:#1F2937">
+        <div style="width:36px;height:36px;border-radius:10px;background:#1F2937;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';color:#E3C08A;font-size:24px">north_east</span></div>
+        <span style="font-family:Poppins;font-weight:600;font-size:22px;letter-spacing:-0.02em;color:#1F2937">udda<span style="color:#B07A48">ya</span></span>
+      </a>
+      <nav style="display:flex;gap:28px;margin:0 auto;font-size:15px;font-weight:500;flex-wrap:wrap">
+        <a href="Candidate Dashboard.dc.html" style="color:#374151" style-hover="color:#B07A48">Find Jobs</a>
+        <a href="#features" style="color:#374151" style-hover="color:#B07A48">How It Works</a>
+        <a href="Recruiter Dashboard.dc.html" style="color:#374151" style-hover="color:#B07A48">For Companies</a>
+      </nav>
+      <div style="display:flex;gap:10px">
+        <a href="Candidate Dashboard.dc.html" style="padding:10px 18px;border-radius:10px;color:#1F2937;font-weight:600;font-size:15px;border:1px solid #ECE8E1" style-hover="border-color:#B8B0A3;color:#1F2937">Login</a>
+        <a href="Profile.dc.html" style="padding:10px 18px;border-radius:10px;background:#DCEFE4;color:#1F4D3A;font-weight:600;font-size:15px" style-hover="background:#C7E3D3;color:#1F4D3A">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <section style="background:#FBF9F5;color:#1F2937;padding:72px 24px 140px">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <div style="display:inline-flex;align-self:flex-start;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,0.75);color:#6B4423;font-size:14px;font-weight:500"><span style="font-family:'Material Symbols Rounded';font-size:18px">trending_up</span>Uddaya · Sanskrit for rise, ascent, progress</div>
+        <h1 style="margin:0;font-family:Poppins;font-weight:600;font-size:clamp(44px,6vw,72px);line-height:1.02;letter-spacing:-0.03em;text-wrap:balance">Rise. Achieve. Succeed.</h1>
+        <p style="margin:0;font-size:clamp(18px,2vw,24px);line-height:1.4;color:#4B5563;max-width:30ch;text-wrap:pretty">AI-powered job matching for your next opportunity</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px">
+          <a href="Profile.dc.html" style="padding:16px 28px;border-radius:12px;background:#DCEFE4;color:#1F4D3A;font-weight:600;font-size:17px;" style-hover="background:#C7E3D3;color:#1F4D3A">Sign Up Free</a>
+          <a href="Candidate Dashboard.dc.html" style="padding:16px 28px;border-radius:12px;background:#fff;color:#6B4423;font-weight:600;font-size:17px" style-hover="background:#FDF8EF;color:#6B4423">Explore Jobs</a>
+        </div>
+      </div>
+      <div aria-hidden="true" style="position:relative;aspect-ratio:5/4;border-radius:12px;background:#FFFDF9;border:1px solid #EFE3D1;overflow:hidden">
+        <div style="position:absolute;left:50%;bottom:22%;width:78%;aspect-ratio:1;transform:translate(-50%,50%);border-radius:50%;border:1px solid #F1E2CC"></div>
+        <div style="position:absolute;left:50%;bottom:22%;width:58%;aspect-ratio:1;transform:translate(-50%,50%);border-radius:50%;border:1px solid #EBD5B5"></div>
+        <div style="position:absolute;left:50%;bottom:22%;width:38%;aspect-ratio:1;transform:translate(-50%,50%);border-radius:50%;background:#F3DDBD"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:22%;background:#FFFDF9;border-top:1px solid #E6D3B8"></div>
+        <div style="position:absolute;left:14%;right:14%;bottom:22%;height:42%;display:flex;align-items:flex-end;gap:6%">
+          <div style="flex:1;height:22%;background:#EFE6D8;border-radius:4px 4px 0 0"></div>
+          <div style="flex:1;height:40%;background:#E6D8C4;border-radius:4px 4px 0 0"></div>
+          <div style="flex:1;height:60%;background:#DCC7A8;border-radius:4px 4px 0 0"></div>
+          <div style="flex:1;height:82%;background:#CFAE84;border-radius:4px 4px 0 0"></div>
+          <div style="flex:1;height:100%;background:#B07A48;border-radius:4px 4px 0 0;position:relative">
+            <span style="position:absolute;left:50%;top:-38px;transform:translateX(-50%);font-family:'Material Symbols Rounded';font-size:30px;color:#8A5A2B">north_east</span>
+          </div>
+        </div>
+        <div style="position:absolute;left:8%;bottom:7%;right:8%;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#8A7A66;letter-spacing:0.06em;text-transform:uppercase">
+          <span>Rise</span><span>Achieve</span><span>Succeed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:0 24px;margin-top:-72px;position:relative">
+    <form onSubmit="{{ onSearch }}" style="max-width:1040px;margin:0 auto;background:#fff;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <label style="flex:1 1 320px;display:flex;align-items:center;gap:12px;border:1.5px solid #ECE8E1;border-radius:10px;padding:0 16px;height:60px">
+          <span style="font-family:'Material Symbols Rounded';font-size:24px;color:#9CA3AF">search</span>
+          <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Job title, skills, or company" style="flex:1;border:0;outline:0;font:inherit;font-size:17px;color:#1F2937;background:transparent;min-width:0">
+        </label>
+        <button type="submit" style="height:60px;padding:0 32px;border:0;border-radius:10px;background:#DCEFE4;color:#1F4D3A;font-family:Poppins;font-weight:600;font-size:17px;cursor:pointer;flex:0 0 auto" style-hover="background:#C7E3D3">Search Jobs</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+        <label style="display:flex;align-items:center;gap:8px;background:#F9FAFB;border:1px solid #ECE8E1;border-radius:10px;padding:0 12px;height:44px">
+          <span style="font-family:'Material Symbols Rounded';font-size:20px;color:#B07A48">location_on</span>
+          <select value="{{ loc }}" onChange="{{ onLoc }}" style="flex:1;border:0;background:transparent;font:inherit;font-size:14px;color:#1F2937;outline:0">
+            <option>Any location</option><option>Hyderabad</option><option>Bengaluru</option><option>Pune</option><option>Mumbai</option><option>Delhi NCR</option><option>Remote</option>
+          </select>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;background:#F9FAFB;border:1px solid #ECE8E1;border-radius:10px;padding:0 12px;height:44px">
+          <span style="font-family:'Material Symbols Rounded';font-size:20px;color:#B07A48">work_history</span>
+          <select value="{{ exp }}" onChange="{{ onExp }}" style="flex:1;border:0;background:transparent;font:inherit;font-size:14px;color:#1F2937;outline:0">
+            <option>Any experience</option><option>Junior (0–2 yrs)</option><option>Mid-level (2–5 yrs)</option><option>Senior (5+ yrs)</option><option>Lead / Manager</option>
+          </select>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;background:#F9FAFB;border:1px solid #ECE8E1;border-radius:10px;padding:0 12px;height:44px">
+          <span style="font-family:'Material Symbols Rounded';font-size:20px;color:#B07A48">payments</span>
+          <select value="{{ sal }}" onChange="{{ onSal }}" style="flex:1;border:0;background:transparent;font:inherit;font-size:14px;color:#1F2937;outline:0">
+            <option>Any salary</option><option>₹5–10 LPA</option><option>₹10–20 LPA</option><option>₹20–30 LPA</option><option>₹30 LPA+</option>
+          </select>
+        </label>
+      </div>
+    </form>
+  </section>
+
+  <section id="features" style="padding:96px 24px 40px">
+    <div style="max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:40px">
+      <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:clamp(28px,3.4vw,40px);letter-spacing:-0.02em;text-align:center;color:#1F2937">How Uddaya helps you rise</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:24px">
+        <sc-for list="{{ features }}" as="f" hint-placeholder-count="3">
+          <div style="background:#fff;border-radius:12px;padding:32px;display:flex;flex-direction:column;gap:14px;">
+            <div style="width:auto;height:auto;border-radius:10px;background:transparent;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:28px;color:#B07A48">{{ f.icon }}</span></div>
+            <h3 style="margin:0;font-family:Poppins;font-weight:600;font-size:21px;color:#1F2937">{{ f.title }}</h3>
+            <p style="margin:0;font-size:16px;line-height:1.55;color:#4B5563">{{ f.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:40px 24px 96px">
+    <div style="max-width:1040px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px;border-top:1px solid #ECE8E1;padding-top:48px">
+      <div style="text-align:center;display:flex;flex-direction:column;gap:4px">
+        <div style="font-family:Poppins;font-weight:600;font-size:44px;color:#1F2937;letter-spacing:-0.02em">{{ candidates }}</div>
+        <div style="font-size:16px;color:#4B5563">candidates onboarded</div>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;gap:4px">
+        <div style="font-family:Poppins;font-weight:600;font-size:44px;color:#1F2937;letter-spacing:-0.02em">500+</div>
+        <div style="font-size:16px;color:#4B5563">hiring companies</div>
+      </div>
+      <div style="text-align:center;display:flex;flex-direction:column;gap:4px">
+        <div style="font-family:Poppins;font-weight:600;font-size:44px;color:#1F2937;letter-spacing:-0.02em">3x</div>
+        <div style="font-size:16px;color:#4B5563">faster interviews</div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#F4F1EB;color:#1F2937;border-top:1px solid #E7E1D6;padding:48px 24px;margin-top:auto">
+    <div style="max-width:1200px;margin:0 auto;display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:Poppins;font-weight:600;font-size:22px">udda<span style="color:#E3C08A">ya</span></span>
+        <span style="font-size:14px;color:#6B7280">Rise. Achieve. Succeed.</span>
+      </div>
+      <nav style="display:flex;gap:24px;flex-wrap:wrap;font-size:14px">
+        <a href="#" style="color:#374151" style-hover="color:#E3C08A">Contact</a>
+        <a href="#" style="color:#374151" style-hover="color:#E3C08A">Privacy</a>
+        <a href="#" style="color:#374151" style-hover="color:#E3C08A">Terms</a>
+      </nav>
+      <div style="display:flex;gap:10px">
+        <a href="#" style="padding:8px 12px;border-radius:8px;border:1px solid #DDD5C8;color:#374151;font-size:13px" style-hover="border-color:#E3C08A;color:#E3C08A">LinkedIn</a>
+        <a href="#" style="padding:8px 12px;border-radius:8px;border:1px solid #DDD5C8;color:#374151;font-size:13px" style-hover="border-color:#E3C08A;color:#E3C08A">X</a>
+        <a href="#" style="padding:8px 12px;border-radius:8px;border:1px solid #DDD5C8;color:#374151;font-size:13px" style-hover="border-color:#E3C08A;color:#E3C08A">Instagram</a>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { q: '', loc: 'Any location', exp: 'Any experience', sal: 'Any salary', n: 12450 };
+  componentDidMount() { this.t = setInterval(() => { if (Math.random() < 0.4) this.setState(s => ({ n: s.n + 1 })); }, 2500); }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    return {
+      ...this.state,
+      candidates: this.state.n.toLocaleString('en-IN'),
+      onQ: e => this.setState({ q: e.target.value }),
+      onLoc: e => this.setState({ loc: e.target.value }),
+      onExp: e => this.setState({ exp: e.target.value }),
+      onSal: e => this.setState({ sal: e.target.value }),
+      onSearch: e => { e.preventDefault(); location.href = 'Candidate Dashboard.dc.html?q=' + encodeURIComponent(this.state.q); },
+      features: [
+        { icon: 'monitoring', title: 'Smart Matching', body: 'AI matches you to 87% compatible jobs' },
+        { icon: 'star', title: 'Interview Prep', body: 'AI mock interviews with real-time feedback' },
+        { icon: 'notifications_active', title: 'Live Alerts', body: 'Get notified the moment jobs match your skills' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL@24,400,0..1" rel="stylesheet">
+<style>
+body{margin:0;background:#fff;color:#1F2937;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#B07A48;text-decoration:none}a:hover{color:#8A5A2B}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <header style="background:#fff;border-bottom:1px solid #ECE8E1;position:sticky;top:0;z-index:30">
+    <div style="padding:12px 20px;display:flex;align-items:center;gap:14px;height:66px">
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ toggleMenu }}" aria-label="Menu" style="width:40px;height:40px;border:1px solid #ECE8E1;border-radius:10px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:22px">menu</span></button>
+      </sc-if>
+      <a href="Landing Page.dc.html" style="display:flex;align-items:center;gap:10px">
+        <div style="width:34px;height:34px;border-radius:10px;background:#1F2937;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';color:#E3C08A;font-size:22px">north_east</span></div>
+        <span style="font-family:Poppins;font-weight:600;font-size:20px;color:#1F2937;letter-spacing:-0.02em">udda<span style="color:#B07A48">ya</span></span>
+      </a>
+      <span style="font-size:13px;font-weight:600;color:#6B4423;background:#FAF0DF;padding:4px 10px;border-radius:999px">Recruiter Portal</span>
+      <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+        <button onClick="{{ bell }}" aria-label="Notifications" style="width:42px;height:42px;border:1px solid #ECE8E1;border-radius:12px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:22px">notifications</span></button>
+        <div style="position:relative">
+          <button onClick="{{ toggleUser }}" style="display:flex;align-items:center;gap:8px;border:1px solid #ECE8E1;border-radius:12px;background:#fff;cursor:pointer;padding:4px 10px 4px 4px;height:42px">
+            <span style="width:32px;height:32px;border-radius:9px;background:#1F2937;color:#fff;font-family:Poppins;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">PR</span>
+            <span style="font-family:'Material Symbols Rounded';font-size:20px;color:#6B7280">expand_more</span>
+          </button>
+          <sc-if value="{{ userOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;right:0;top:50px;width:220px;background:#fff;border:1px solid #ECE8E1;border-radius:10px;box-shadow:0 16px 40px rgba(31,41,55,0.14);padding:6px;z-index:40;display:flex;flex-direction:column">
+              <span style="padding:10px 12px;font-size:13px;color:#6B7280">Priya Rao · TechCorp</span>
+              <a href="Candidate Dashboard.dc.html" style="padding:10px 12px;border-radius:8px;color:#1F2937;font-size:14px" style-hover="background:#F9FAFB;color:#1F2937">Switch to Candidate</a>
+              <a href="Landing Page.dc.html" style="padding:10px 12px;border-radius:8px;color:#B91C1C;font-size:14px" style-hover="background:#FEF2F2;color:#B91C1C">Log out</a>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div style="display:flex;flex:1">
+    <sc-if value="{{ showSide }}" hint-placeholder-val="{{ true }}">
+      <aside style="{{ sideStyle }}">
+        <a href="Post a Job.dc.html" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;background:#DCEFE4;color:#1F4D3A;font-weight:600;font-size:15px;margin-bottom:10px" style-hover="background:#C7E3D3;color:#1F4D3A"><span style="font-family:'Material Symbols Rounded';font-size:20px">add</span>Post New Job</a>
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="8">
+          <a href="{{ n.href }}" onClick="{{ n.onClick }}" style="{{ n.style }}"><span style="font-family:'Material Symbols Rounded';font-size:20px">{{ n.icon }}</span>{{ n.label }}</a>
+        </sc-for>
+      </aside>
+    </sc-if>
+    <sc-if value="{{ overlay }}" hint-placeholder-val="{{ false }}"><div onClick="{{ toggleMenu }}" style="position:fixed;inset:0;background:rgba(31,41,55,0.35);z-index:20"></div></sc-if>
+
+    <main style="flex:1;min-width:0;padding:28px 24px 64px;display:flex;flex-direction:column;gap:36px;background:#fff">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <h1 style="margin:0;font-family:Poppins;font-weight:600;font-size:28px;letter-spacing:-0.02em">Hiring overview</h1>
+          <p style="margin:0;color:#4B5563;font-size:15px">TechCorp · Last 30 days</p>
+        </div>
+        <sc-if value="{{ showUpgrade }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:center;gap:12px;background:#FDF8EF;border:1px solid #EFDDBC;border-radius:12px;padding:10px 14px;font-size:14px;flex-wrap:wrap">
+            <span>{{ activeCount }} of 5 job slots used</span>
+            <a href="#" style="font-weight:600;color:#8A5A2B">Upgrade plan to post more jobs</a>
+          </div>
+        </sc-if>
+      </div>
+
+      <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">
+        <div style="background:#F9FAFB;border:1px solid #ECE8E1;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600;color:#4B5563">Jobs Posted</span><span style="font-family:'Material Symbols Rounded';font-size:22px;color:#8FC3A8">trending_up</span></div>
+          <span style="font-family:Poppins;font-weight:600;font-size:36px;color:#B07A48;line-height:1.1">{{ activeCount }}</span>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px"><span style="font-size:13px;color:#6B7280">Active Job Posts</span><svg width="72" height="24" viewBox="0 0 72 24"><polyline points="0,20 12,18 24,19 36,12 48,13 60,6 72,4" fill="none" stroke="#B07A48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline></svg></div>
+        </div>
+        <div style="background:#F9FAFB;border:1px solid #ECE8E1;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600;color:#4B5563">Applications Received</span><span style="font-family:'Material Symbols Rounded';font-size:22px;color:#8FC3A8">trending_up</span></div>
+          <span style="font-family:Poppins;font-weight:600;font-size:36px;color:#1F2937;line-height:1.1">42</span>
+          <span style="font-size:13px;color:#6B7280">Total Applications</span>
+        </div>
+        <div style="background:#F9FAFB;border:1px solid #ECE8E1;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600;color:#4B5563">To Interview</span><span style="font-family:'Material Symbols Rounded';font-size:22px;color:#8A5A2B">event</span></div>
+          <span style="font-family:Poppins;font-weight:600;font-size:36px;color:#B07A48;line-height:1.1">8</span>
+          <span style="font-size:13px;color:#6B7280">Candidates to Interview</span>
+          <span style="font-size:12px;color:#374151">Next interview: Tomorrow at 2 PM</span>
+        </div>
+        <div style="background:#F9FAFB;border:1px solid #ECE8E1;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600;color:#4B5563">Hired</span><span style="font-family:'Material Symbols Rounded';font-size:22px;color:#8FC3A8">task_alt</span></div>
+          <span style="font-family:Poppins;font-weight:600;font-size:36px;color:#3F7A5E;line-height:1.1">2</span>
+          <span style="font-size:13px;color:#6B7280">Offers Accepted</span>
+          <span style="font-size:12px;color:#374151">Last hired: 3 days ago</span>
+        </div>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:14px">
+        <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px">Your Job Posts</h2>
+        <div style="border:1px solid #ECE8E1;border-radius:10px;overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:14px;min-width:720px">
+            <thead>
+              <tr style="background:#F9FAFB;text-align:left;color:#6B7280;font-size:12px;text-transform:uppercase;letter-spacing:0.05em">
+                <th style="padding:12px 16px;font-weight:600">Job Title</th><th style="padding:12px 16px;font-weight:600">Applications</th><th style="padding:12px 16px;font-weight:600">Views</th><th style="padding:12px 16px;font-weight:600">Status</th><th style="padding:12px 16px;font-weight:600">Posted</th><th style="padding:12px 16px;font-weight:600;text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ jobs }}" as="j" hint-placeholder-count="6">
+                <tr onMouseEnter="{{ j.enter }}" onMouseLeave="{{ j.leave }}" style="{{ j.rowStyle }}">
+                  <td style="padding:14px 16px;font-weight:600">{{ j.title }}</td>
+                  <td style="padding:14px 16px">{{ j.apps }}</td>
+                  <td style="padding:14px 16px;color:#4B5563">{{ j.views }}</td>
+                  <td style="padding:14px 16px"><span style="{{ j.badgeStyle }}">{{ j.status }}</span></td>
+                  <td style="padding:14px 16px;color:#4B5563">{{ j.posted }}</td>
+                  <td style="padding:10px 16px;text-align:right">
+                    <div style="{{ j.actionsStyle }}">
+                      <a href="Post a Job.dc.html" style="padding:6px 10px;border-radius:8px;border:1px solid #ECE8E1;color:#1F2937;font-size:13px" style-hover="border-color:#B8B0A3;color:#1F2937">Edit</a>
+                      <button onClick="{{ j.toggle }}" style="padding:6px 10px;border-radius:8px;border:1px solid #ECE8E1;background:#fff;color:#1F2937;font:inherit;font-size:13px;cursor:pointer">{{ j.toggleLabel }}</button>
+                      <a href="#analytics" style="padding:6px 10px;border-radius:8px;border:1px solid #ECE8E1;color:#1F2937;font-size:13px" style-hover="border-color:#B8B0A3;color:#1F2937">Analytics</a>
+                    </div>
+                  </td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px">Application Pipeline</h2>
+          <span style="font-size:13px;color:#6B7280">Drag cards between stages</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px">
+          <sc-for list="{{ cols }}" as="c" hint-placeholder-count="4">
+            <div onDragOver="{{ c.over }}" onDrop="{{ c.drop }}" onDragLeave="{{ c.leaveCol }}" style="{{ c.style }}">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-family:Poppins;font-weight:600;font-size:15px">{{ c.name }}</span>
+                <span style="font-size:12px;color:#4B5563;background:#fff;border:1px solid #ECE8E1;padding:2px 8px;border-radius:999px">{{ c.count }} applications</span>
+              </div>
+              <sc-for list="{{ c.cards }}" as="k" hint-placeholder-count="2">
+                <div draggable="true" onDragStart="{{ k.start }}" onMouseEnter="{{ k.enter }}" onMouseLeave="{{ k.leave }}" style="background:#fff;border:1px solid #ECE8E1;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:4px;cursor:grab;">
+                  <div style="display:flex;align-items:center;gap:6px"><sc-if value="{{ k.scheduled }}"><span style="width:8px;height:8px;border-radius:50%;background:#DCEFE4"></span></sc-if><span style="font-weight:700;font-size:14px">{{ k.name }}</span></div>
+                  <span style="font-size:12px;color:#4B5563">{{ k.job }}</span>
+                  <span style="font-size:12px;color:#6B7280">{{ k.meta }}</span>
+                  <sc-if value="{{ k.isOffer }}">
+                    <div style="display:flex;gap:6px;margin-top:6px">
+                      <span style="{{ k.offerStyle }}">{{ k.offerStatus }}</span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ k.hover }}">
+                    <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+                      <button onClick="{{ k.schedule }}" style="padding:5px 8px;border-radius:6px;border:1px solid #ECE8E1;background:#F9FAFB;font:inherit;font-size:12px;cursor:pointer;color:#1F2937">Schedule Interview</button>
+                      <button onClick="{{ k.message }}" style="padding:5px 8px;border-radius:6px;border:1px solid #ECE8E1;background:#F9FAFB;font:inherit;font-size:12px;cursor:pointer;color:#1F2937">Send Message</button>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section id="analytics" style="display:flex;flex-wrap:wrap;gap:24px">
+        <div style="flex:2 1 420px;min-width:0;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+            <h2 style="margin:0;font-family:Poppins;font-weight:600;font-size:18px">Hiring Analytics</h2>
+            <span style="font-size:13px;color:#6B7280">Time to hire, past 30 days</span>
+          </div>
+          <svg viewBox="0 0 600 200" style="width:100%;height:auto" preserveAspectRatio="none">
+            <line x1="0" y1="50" x2="600" y2="50" stroke="#F3F4F6"></line><line x1="0" y1="100" x2="600" y2="100" stroke="#F3F4F6"></line><line x1="0" y1="150" x2="600" y2="150" stroke="#F3F4F6"></line>
+            <polygon points="0,200 0,70 60,64 120,80 180,76 240,96 300,90 360,110 420,104 480,120 540,126 600,132 600,200" fill="#FAF0DF"></polygon>
+            <polyline points="0,70 60,64 120,80 180,76 240,96 300,90 360,110 420,104 480,120 540,126 600,132" fill="none" stroke="#B07A48" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></polyline>
+          </svg>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:#9CA3AF"><span>Aug 30</span><span>Sept 14</span><span>Sept 29</span></div>
+          <div style="font-size:16px">Average time to hire: <strong style="font-family:Poppins;color:#8A5A2B">21 days</strong></div>
+        </div>
+        <div style="flex:1 1 260px;border:1px solid #ECE8E1;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-family:Poppins;font-weight:600;font-size:16px">Source breakdown</h3>
+          <div style="display:flex;height:12px;border-radius:999px;overflow:hidden"><span style="width:40%;background:#1F2937"></span><span style="width:30%;background:#F6E1C3"></span><span style="width:30%;background:#DCEFE4"></span></div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:#1F2937"></span>LinkedIn<span style="margin-left:auto;font-weight:600">40%</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:#F6E1C3"></span>Direct<span style="margin-left:auto;font-weight:600">30%</span></div>
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:#DCEFE4"></span>Referral<span style="margin-left:auto;font-weight:600">30%</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1F2937;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:60;display:flex;align-items:center;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:20px;color:#8FC3A8">check_circle</span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const COLS = [['new', 'New', '#B07A48'], ['screen', 'Screening', '#4A6490'], ['interview', 'Interview', '#E3C08A'], ['offer', 'Offer', '#8FC3A8']];
+const COUNTS = { new: 12, screen: 8, interview: 4, offer: 2 };
+class Component extends DCLogic {
+  state = {
+    w: window.innerWidth, menu: false, user: false, toast: '', hoverRow: -1, hoverCard: null, dragId: null, dropCol: null,
+    jobs: [
+      { title: 'Senior Python Engineer', apps: 18, views: 1240, active: true, posted: 'Sept 24' },
+      { title: 'DevOps Engineer', apps: 9, views: 610, active: true, posted: 'Sept 19' },
+      { title: 'Product Designer', apps: 7, views: 820, active: true, posted: 'Sept 15' },
+      { title: 'Engineering Manager', apps: 4, views: 390, active: true, posted: 'Sept 10' },
+      { title: 'Data Analyst', apps: 3, views: 275, active: true, posted: 'Sept 2' },
+      { title: 'QA Automation Engineer', apps: 11, views: 940, active: false, posted: 'Aug 21' }
+    ],
+    cards: [
+      { id: 1, col: 'new', name: 'Ananya Iyer', job: 'Senior Python Engineer', meta: 'Applied 2 days ago' },
+      { id: 2, col: 'new', name: 'Rohit Menon', job: 'DevOps Engineer', meta: 'Applied 3 days ago' },
+      { id: 3, col: 'new', name: 'Fatima Sheikh', job: 'Product Designer', meta: 'Applied 4 days ago' },
+      { id: 4, col: 'screen', name: 'Vikram Singh', job: 'Senior Python Engineer', meta: 'Phone screen passed' },
+      { id: 5, col: 'screen', name: 'Meera Pillai', job: 'Data Analyst', meta: 'Assessment sent' },
+      { id: 6, col: 'interview', name: 'Arjun Reddy', job: 'Senior Python Engineer', meta: 'Tomorrow, 2:00 PM', scheduled: true },
+      { id: 7, col: 'interview', name: 'Kavya Nair', job: 'Engineering Manager', meta: 'Oct 2, 11:00 AM', scheduled: true },
+      { id: 8, col: 'offer', name: 'Siddharth Joshi', job: 'DevOps Engineer', meta: 'Offer sent Sept 26', offer: 'Accepted' },
+      { id: 9, col: 'offer', name: 'Neha Gupta', job: 'Product Designer', meta: 'Offer sent Sept 27', offer: 'Awaiting reply' }
+    ]
+  };
+  componentDidMount() { this.onR = () => this.setState({ w: window.innerWidth }); window.addEventListener('resize', this.onR); }
+  componentWillUnmount() { window.removeEventListener('resize', this.onR); clearTimeout(this.tt); }
+  toast(m) { clearTimeout(this.tt); this.setState({ toast: m }); this.tt = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  renderVals() {
+    const s = this.state, narrow = s.w < 1024;
+    const nav = [['home', 'Dashboard', '#', 1], ['work', 'My Jobs', '#', 0], ['inbox', 'Applications', '#', 0], ['chat', 'Messages', '#', 0], ['group', 'Team', '#', 0], ['bar_chart', 'Analytics', '#analytics', 0], ['credit_card', 'Billing', '#', 0], ['settings', 'Settings', '#', 0]]
+      .map(([icon, label, href, a]) => ({ icon, label, href,
+        onClick: e => { this.setState({ menu: false }); if (href === '#' && !a) { e.preventDefault(); this.toast(`${label} isn't part of this prototype`); } },
+        style: { display: 'flex', alignItems: 'center', gap: 12, padding: '11px 14px', borderRadius: 10, fontSize: 15, fontWeight: a ? 600 : 500, color: a ? '#6B4423' : '#374151', background: a ? '#FAF0DF' : 'transparent' } }));
+    const side = { width: 240, flex: '0 0 240px', background: '#F9FAFB', borderRight: '1px solid #ECE8E1', padding: '20px 14px', display: 'flex', flexDirection: 'column', gap: 4 };
+    const sideStyle = narrow ? { ...side, position: 'fixed', top: 0, bottom: 0, left: 0, zIndex: 25, paddingTop: 80, boxShadow: '8px 0 30px rgba(31,41,55,0.2)' } : { ...side, position: 'sticky', top: 66, height: 'calc(100vh - 66px)' };
+    const activeCount = s.jobs.filter(j => j.active).length;
+    const jobs = s.jobs.map((j, i) => {
+      const h = s.hoverRow === i;
+      return { ...j, views: j.views.toLocaleString('en-IN'), status: j.active ? 'Active' : 'Closed',
+        enter: () => this.setState({ hoverRow: i }), leave: () => this.setState({ hoverRow: -1 }),
+        rowStyle: { borderTop: '1px solid #F3F4F6', background: h ? '#FDF8EF' : '#fff' },
+        badgeStyle: { fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 999, background: j.active ? '#E6F2EA' : '#F3F4F6', color: j.active ? '#2F5E48' : '#6B7280' },
+        actionsStyle: { display: 'inline-flex', gap: 6, opacity: h ? 1 : 0.35, transition: 'opacity .15s' },
+        toggleLabel: j.active ? 'Close' : 'Reopen',
+        toggle: () => { this.setState(p => ({ jobs: p.jobs.map((x, k) => k === i ? { ...x, active: !x.active } : x) })); this.toast(j.active ? `${j.title} closed` : `${j.title} reopened`); } };
+    });
+    const cols = COLS.map(([id, name, color]) => {
+      const cards = s.cards.filter(c => c.col === id);
+      return { name, count: COUNTS[id] + cards.length - s.cards.filter(c => (c.orig || c.col) === id).length,
+        style: { background: s.dropCol === id ? '#FDF8EF' : '#F9FAFB', borderRadius: 10, borderTop: `4px solid ${color}`, padding: 14, display: 'flex', flexDirection: 'column', gap: 10, minHeight: 220, outline: s.dropCol === id ? `2px dashed ${color}` : 'none' },
+        over: e => { e.preventDefault(); if (s.dropCol !== id) this.setState({ dropCol: id }); },
+        leaveCol: () => {},
+        drop: e => { e.preventDefault(); const cid = s.dragId; this.setState(p => ({ dropCol: null, dragId: null, cards: p.cards.map(c => c.id === cid ? { ...c, orig: c.orig || c.col, col: id, scheduled: id === 'interview' || c.scheduled, meta: c.col === id ? c.meta : `Moved to ${name} just now` } : c) })); if (cid) this.toast(`Moved to ${name}`); },
+        cards: cards.map(c => ({ ...c, isOffer: !!c.offer && id === 'offer', offerStatus: c.offer, hover: s.hoverCard === c.id, scheduled: !!c.scheduled && id === 'interview',
+          offerStyle: { fontSize: 12, fontWeight: 600, padding: '3px 8px', borderRadius: 6, background: c.offer === 'Accepted' ? '#E6F2EA' : '#FAF0DF', color: c.offer === 'Accepted' ? '#2F5E48' : '#6B4423' },
+          start: e => { e.dataTransfer.effectAllowed = 'move'; this.setState({ dragId: c.id }); },
+          enter: () => this.setState({ hoverCard: c.id }), leave: () => this.setState({ hoverCard: null }),
+          schedule: () => this.toast(`Interview invite sent to ${c.name}`), message: () => this.toast(`Message sent to ${c.name}`) })) };
+    });
+    return { narrow, showSide: !narrow || s.menu, overlay: narrow && s.menu, sideStyle, nav, jobs, cols, activeCount, showUpgrade: activeCount >= 5, userOpen: s.user, toast: s.toast,
+      toggleMenu: () => this.setState({ menu: !s.menu }), toggleUser: () => this.setState({ user: !s.user }), bell: () => this.toast('2 new applications today') };
+  }
+}
+</script>
+</body>
+</html>

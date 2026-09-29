@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL@24,400,0..1" rel="stylesheet">
+<style>
+body{margin:0;background:#F9FAFB;color:#1F2937;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#B07A48;text-decoration:none}a:hover{color:#8A5A2B}
+*{box-sizing:border-box}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <header style="background:#fff;border-bottom:1px solid #ECE8E1">
+    <div style="padding:12px 24px;display:flex;align-items:center;gap:14px">
+      <a href="Candidate Dashboard.dc.html" aria-label="Back" style="width:40px;height:40px;border:1px solid #ECE8E1;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#1F2937"><span style="font-family:'Material Symbols Rounded';font-size:22px">arrow_back</span></a>
+      <a href="Candidate Dashboard.dc.html" style="font-family:Poppins;font-weight:600;font-size:20px;color:#1F2937">udda<span style="color:#B07A48">ya</span></a>
+    </div>
+  </header>
+  <div style="padding:28px 24px 12px;display:flex;flex-direction:column;gap:18px">
+    <h1 style="margin:0;font-family:Poppins;font-weight:600;font-size:28px;letter-spacing:-0.02em">My Applications</h1>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4"><button onClick="{{ f.pick }}" style="{{ f.style }}">{{ f.label }}</button></sc-for>
+      </div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:14px;color:#4B5563">Sort
+        <select value="{{ sort }}" onChange="{{ onSort }}" style="height:38px;border:1px solid #ECE8E1;border-radius:10px;padding:0 10px;font:inherit;font-size:14px;background:#fff;color:#1F2937"><option>Recent</option><option>Company A–Z</option></select>
+      </label>
+      <label style="margin-left:auto;flex:0 1 280px;display:flex;align-items:center;gap:8px;height:40px;border:1px solid #ECE8E1;border-radius:10px;padding:0 12px;background:#fff">
+        <span style="font-family:'Material Symbols Rounded';font-size:20px;color:#9CA3AF">search</span>
+        <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Search jobs..." style="flex:1;min-width:0;border:0;outline:0;font:inherit;font-size:14px;background:transparent">
+      </label>
+    </div>
+    <span style="font-size:12px;color:#6B7280">Drag cards between columns, or focus a card and use ← → keys.</span>
+  </div>
+
+  <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+    <div style="margin:40px auto;max-width:420px;text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center;padding:0 24px">
+      <span style="width:80px;height:80px;border-radius:12px;background:#FAF0DF;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:44px;color:#B07A48">work</span></span>
+      <span style="font-family:Poppins;font-weight:600;font-size:20px">Start applying to jobs</span>
+      <a href="Candidate Dashboard.dc.html#jobs" style="padding:12px 22px;border-radius:10px;background:#DCEFE4;color:#1F4D3A;font-weight:600" style-hover="background:#C7E3D3;color:#1F4D3A">Explore Opportunities</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ notEmpty }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:1;overflow-x:auto;padding:12px 24px 48px">
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(260px,1fr));gap:16px;min-width:1100px;align-items:start">
+        <sc-for list="{{ cols }}" as="c" hint-placeholder-count="4">
+          <div onDragOver="{{ c.over }}" onDrop="{{ c.drop }}" style="{{ c.style }}">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 2px 4px">
+              <span style="font-family:Poppins;font-weight:600;font-size:16px">{{ c.name }}</span>
+              <span style="font-size:12px;font-weight:600;background:#ECE8E1;color:#374151;padding:2px 9px;border-radius:999px">{{ c.count }}</span>
+            </div>
+            <sc-for list="{{ c.cards }}" as="k" hint-placeholder-count="2">
+              <div draggable="true" tabindex="0" onDragStart="{{ k.start }}" onKeyDown="{{ k.key }}" onMouseEnter="{{ k.enter }}" onMouseLeave="{{ k.leave }}" style="{{ k.style }}">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                  <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:#374151">{{ k.company }}</span>
+                  <sc-if value="{{ k.hover }}">
+                    <span style="display:flex;gap:2px">
+                      <sc-for list="{{ k.actions }}" as="a"><button onClick="{{ a.run }}" title="{{ a.label }}" aria-label="{{ a.label }}" style="width:28px;height:28px;border:0;border-radius:6px;background:#F3F4F6;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Rounded';font-size:17px;color:#374151">{{ a.icon }}</span></button></sc-for>
+                    </span>
+                  </sc-if>
+                </div>
+                <span style="font-size:14px;font-weight:600;color:#1F2937">{{ k.job }}</span>
+                <sc-if value="{{ k.isApplied }}"><span style="font-size:11px;color:#9CA3AF">{{ k.meta }}</span></sc-if>
+                <sc-if value="{{ k.isInterview }}">
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#3F7A5E"><span style="width:8px;height:8px;border-radius:50%;background:#DCEFE4"></span>{{ k.meta }}</span>
+                    <div style="display:flex;gap:12px;font-size:13px">
+                      <a href="#" onClick="{{ k.join }}" style="display:flex;align-items:center;gap:4px;font-weight:600;color:#4A6490"><span style="font-family:'Material Symbols Rounded';font-size:18px">videocam</span>Join Interview</a>
+                      <a href="#" onClick="{{ k.reschedule }}" style="color:#6B7280">Reschedule</a>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ k.isOffer }}">
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <span style="font-family:Poppins;font-weight:600;font-size:16px;color:#8A5A2B">{{ k.salary }}</span>
+                    <span style="font-size:12px;color:#6B7280">Joining date: {{ k.joining }}</span>
+                    <sc-if value="{{ k.pending }}">
+                      <div style="display:flex;gap:6px">
+                        <button onClick="{{ k.accept }}" style="flex:1;height:34px;border:0;border-radius:8px;background:#DCEFE4;color:#1F4D3A;font:inherit;font-size:13px;font-weight:600;cursor:pointer">Accept Offer</button>
+                        <button onClick="{{ k.decline }}" style="flex:1;height:34px;border:1.5px solid #B35A52;border-radius:8px;background:#fff;color:#B35A52;font:inherit;font-size:13px;font-weight:600;cursor:pointer">Decline</button>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ k.accepted }}"><span style="font-size:13px;font-weight:600;color:#2F5E48;background:#E6F2EA;padding:6px 10px;border-radius:8px;align-self:flex-start">Offer accepted</span></sc-if>
+                    <a href="#" onClick="{{ k.review }}" style="font-size:13px;font-weight:600">Review Full Offer</a>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ k.isClosed }}">
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:11px;color:#9CA3AF">{{ k.meta }}</span>
+                    <a href="#" onClick="{{ k.feedback }}" style="font-size:13px;font-weight:600;color:#374151">{{ k.feedbackLabel }}</a>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <sc-if value="{{ c.none }}"><div style="border:1.5px dashed #ECE8E1;border-radius:8px;padding:20px;text-align:center;font-size:13px;color:#9CA3AF">Nothing here</div></sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1F2937;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;z-index:60;display:flex;align-items:center;gap:8px"><span style="font-family:'Material Symbols Rounded';font-size:20px;color:#8FC3A8">check_circle</span>{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const COLS = [['applied', 'Applied', '#B07A48'], ['interview', 'Interview Scheduled', '#A9BCDD'], ['offer', 'Offer Received', '#E3C08A'], ['closed', 'Rejected / Closed', '#9CA3AF']];
+const ORDER = COLS.map(c => c[0]);
+const RAW = [
+  ['TechCorp', 'Senior Python Engineer', 'Applied 2 days ago', 2], ['Startup XYZ', 'Full Stack Developer', 'Applied 5 days ago', 5], ['Razorleaf', 'Backend Engineer, Payments', 'Applied 1 day ago', 1],
+  ['Datanest', 'Python Developer, Data', 'Applied 3 days ago', 3], ['Kiranaverse', 'Staff Engineer, Platform', 'Applied 6 days ago', 6], ['Mitra Health', 'Django Developer', 'Applied 1 week ago', 7],
+  ['Yatra Labs', 'Engineering Lead, APIs', 'Applied 8 days ago', 8], ['Sthir Systems', 'Cloud Engineer (AWS)', 'Applied 9 days ago', 9], ['Pravah', 'Node.js Engineer', 'Applied 10 days ago', 10],
+  ['Kalam EdTech', 'Senior React Developer', 'Applied 11 days ago', 11], ['Finverse', 'Platform Engineer', 'Applied 12 days ago', 12], ['Nirmaan', 'Backend Developer', 'Applied 2 weeks ago', 14]
+].map(([company, job, meta, age], i) => ({ id: i + 1, col: 'applied', company, job, meta, age }));
+const CARDS = [...RAW,
+  { id: 20, col: 'interview', company: 'TechCorp', job: 'Senior Python Engineer', meta: 'Sept 30, 2PM', age: 0 },
+  { id: 21, col: 'interview', company: 'CloudSoft', job: 'DevOps Engineer', meta: 'Oct 2, 10AM', age: 1 },
+  { id: 22, col: 'interview', company: 'Razorleaf', job: 'SRE, Payments', meta: 'Oct 3, 4PM', age: 2 },
+  { id: 23, col: 'interview', company: 'Yatra Labs', job: 'Backend Engineer', meta: 'Oct 6, 11AM', age: 3 },
+  { id: 30, col: 'offer', company: 'TechCorp', job: 'Senior Python Engineer', salary: '₹25 LPA', joining: 'Oct 15, 2026', offer: 'pending', age: 1 },
+  { id: 40, col: 'closed', company: 'OldStartup', job: 'Junior Developer', meta: 'Rejected 1 week ago', age: 7 },
+  { id: 41, col: 'closed', company: 'Bharat Retail', job: 'Python Developer', meta: 'Rejected 2 weeks ago', age: 14 },
+  { id: 42, col: 'closed', company: 'Quanta', job: 'Backend Engineer', meta: 'Position closed', age: 20 }
+];
+class Component extends DCLogic {
+  state = { cards: CARDS, filter: 'All', sort: 'Recent', q: '', drag: null, dropCol: null, hover: null, toast: '', asked: {} };
+  componentWillUnmount() { clearTimeout(this.tt); }
+  toast(m) { clearTimeout(this.tt); this.setState({ toast: m }); this.tt = setTimeout(() => this.setState({ toast: '' }), 2400); }
+  move(id, col) {
+    const name = COLS.find(c => c[0] === col)[1];
+    this.setState(p => ({ dropCol: null, drag: null, cards: p.cards.map(c => c.id !== id || c.col === col ? c : {
+      ...c, col, meta: col === 'interview' ? 'Date to be confirmed' : col === 'closed' ? 'Closed just now' : col === 'applied' ? 'Applied just now' : c.meta,
+      salary: c.salary || 'Offer pending', joining: c.joining || 'To be confirmed', offer: col === 'offer' ? (c.offer || 'pending') : c.offer } ) }));
+    this.toast(`Moved to ${name}`);
+  }
+  renderVals() {
+    const s = this.state, q = s.q.trim().toLowerCase();
+    const show = { All: ORDER, Active: ['applied', 'interview'], Rejected: ['closed'], Offers: ['offer'] }[s.filter];
+    let cards = s.cards.filter(c => !q || (c.company + ' ' + c.job).toLowerCase().includes(q));
+    cards = [...cards].sort(s.sort === 'Recent' ? (a, b) => a.age - b.age : (a, b) => a.company.localeCompare(b.company));
+    const cols = COLS.map(([id, name, color]) => {
+      const list = show.includes(id) ? cards.filter(c => c.col === id) : [];
+      const dim = !show.includes(id);
+      return { name, count: s.cards.filter(c => c.col === id).length, none: list.length === 0,
+        style: { background: s.dropCol === id ? '#FDF8EF' : '#F3F4F6', borderTop: `4px solid ${color}`, borderRadius: 12, padding: 12, display: 'flex', flexDirection: 'column', gap: 10, minHeight: 320, opacity: dim ? 0.5 : 1, outline: s.dropCol === id ? `2px dashed ${color}` : 'none' },
+        over: e => { e.preventDefault(); if (s.dropCol !== id) this.setState({ dropCol: id }); },
+        drop: e => { e.preventDefault(); if (s.drag) this.move(s.drag, id); },
+        cards: list.map(c => {
+          const hov = s.hover === c.id, closed = id === 'closed', idx = ORDER.indexOf(id);
+          return { ...c, hover: hov, isApplied: id === 'applied', isInterview: id === 'interview', isOffer: id === 'offer', isClosed: closed,
+            pending: c.offer === 'pending', accepted: c.offer === 'accepted',
+            style: { background: hov ? '#FFFDF7' : '#fff', borderRadius: 8, padding: 16, minHeight: 130, display: 'flex', flexDirection: 'column', gap: 6, cursor: 'grab', boxShadow: 'none', transform: 'none', transition: 'transform .15s, box-shadow .15s', opacity: closed ? 0.6 : 1, outlineColor: '#B07A48' },
+            enter: () => this.setState({ hover: c.id }), leave: () => this.setState({ hover: null }),
+            start: e => { e.dataTransfer.effectAllowed = 'move'; this.setState({ drag: c.id }); },
+            key: e => { if (e.key === 'ArrowRight' && idx < 3) this.move(c.id, ORDER[idx + 1]); if (e.key === 'ArrowLeft' && idx > 0) this.move(c.id, ORDER[idx - 1]); },
+            actions: [
+              { icon: 'chat', label: 'Message', run: () => this.toast(`Message sent to ${c.company}`) },
+              ...(closed ? [] : [{ icon: 'undo', label: 'Withdraw', run: () => this.move(c.id, 'closed') }]),
+              { icon: 'travel_explore', label: 'Explore similar', run: () => { location.href = 'Candidate Dashboard.dc.html?q=' + encodeURIComponent(c.job.split(' ').slice(-1)[0]); } }
+            ],
+            join: e => { e.preventDefault(); this.toast(`Opening video call with ${c.company}`); },
+            reschedule: e => { e.preventDefault(); this.toast('Reschedule request sent'); },
+            accept: () => { this.setState(p => ({ cards: p.cards.map(x => x.id === c.id ? { ...x, offer: 'accepted' } : x) })); this.toast(`You accepted the ${c.company} offer`); },
+            decline: () => { this.setState(p => ({ cards: p.cards.map(x => x.id === c.id ? { ...x, col: 'closed', meta: 'Offer declined', offer: 'declined' } : x) })); this.toast('Offer declined'); },
+            review: e => { e.preventDefault(); this.toast('Offer letter opened'); },
+            feedbackLabel: s.asked[c.id] ? 'Feedback requested ✓' : 'Request Feedback',
+            feedback: e => { e.preventDefault(); this.setState(p => ({ asked: { ...p.asked, [c.id]: true } })); } };
+        }) };
+    });
+    const empty = s.cards.length === 0;
+    return { cols, empty, notEmpty: !empty, q: s.q, sort: s.sort, toast: s.toast,
+      filters: ['All', 'Active', 'Rejected', 'Offers'].map(label => ({ label, pick: () => this.setState({ filter: label }),
+        style: { padding: '8px 16px', borderRadius: 999, border: `1px solid ${s.filter === label ? '#B07A48' : '#ECE8E1'}`, background: s.filter === label ? '#F6E1C3' : '#fff', color: s.filter === label ? '#6B4423' : '#374151', font: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' } })),
+      onSort: e => this.setState({ sort: e.target.value }), onQ: e => this.setState({ q: e.target.value }) };
+  }
+}
+</script>
+</body>
+</html>
