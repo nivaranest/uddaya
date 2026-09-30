@@ -54,3 +54,51 @@ describe("POST /api/ai/suggest-skills", () => {
     expect(body.required.map((s: string) => s.toLowerCase())).not.toContain("django");
   });
 });
+
+import { POST as atsCheck } from "@/app/api/ai/ats-check/route";
+import { SAMPLE_RESUME } from "@/lib/ats";
+
+describe("POST /api/ai/ats-check", () => {
+  const form = (fields: Record<string, string | File>) => {
+    const f = new FormData();
+    for (const [k, v] of Object.entries(fields)) f.append(k, v);
+    return new Request("http://localhost/api/ai/ats-check", { method: "POST", body: f });
+  };
+
+  it("requires resume text or a file", async () => {
+    expect((await atsCheck(form({ text: "  " }))).status).toBe(400);
+  });
+
+  it("rejects unsupported file types", async () => {
+    const res = await atsCheck(form({ file: new File(["x"], "resume.doc") }));
+    expect(res.status).toBe(400);
+    expect((await res.json()).error).toMatch(/docx/i);
+  });
+
+  it("scores pasted text against a Uddaya job without Claude", async () => {
+    const res = await atsCheck(form({ text: SAMPLE_RESUME, jobId: "senior-python-engineer-techcorp" }));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.reviewSource).toBe("not-configured");
+    expect(body.review).toBeNull();
+    expect(body.target).toBe("Senior Python Engineer at TechCorp");
+    expect(body.report.keywords.missing).toContain("Django");
+  });
+
+  it("reads uploaded text files", async () => {
+    const res = await atsCheck(form({ file: new File([SAMPLE_RESUME], "resume.txt", { type: "text/plain" }) }));
+    const body = await res.json();
+    expect(body.report.stats.words).toBeGreaterThan(100);
+  });
+});
+
+describe("POST /api/ai/ats-check with an unreadable file", () => {
+  it("reports that the ATS cannot read it instead of erroring", async () => {
+    const f = new FormData();
+    f.append("file", new File(["   "], "scan.txt", { type: "text/plain" }));
+    const res = await atsCheck(new Request("http://localhost/api/ai/ats-check", { method: "POST", body: f }));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.report.checks[0]).toMatchObject({ id: "parse", status: "fail" });
+  });
+});

@@ -486,6 +486,10 @@ export function ProfileClient() {
               <span className="text-xs text-gray-500">Accepted formats: PDF, DOC, DOCX (max 5 MB)</span>
               <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => addResume(e.target.files?.[0])} className="sr-only" aria-label="Upload resume" />
             </label>
+            <Link href="/resume-checker" className="flex items-center gap-2 self-start text-[13px] font-semibold text-bronze">
+              <Icon name="fact_check" className="text-[18px]" />
+              Check your resume&apos;s ATS score
+            </Link>
           </Card>
         </div>
       </div>

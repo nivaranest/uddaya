@@ -196,10 +196,15 @@ export function JobDetailClient({ job, company, reasons, resumes }: Props) {
         <section className="flex flex-[1_1_280px] flex-col items-start gap-3 rounded-xl bg-white p-7">
           <Icon name="star" filled className="text-[32px] text-bronze" />
           <h3 className="m-0 font-display text-lg font-semibold">Prepare for this role</h3>
-          <p className="m-0 text-[15px] text-gray-600">Get AI feedback on your answers</p>
-          <Link href={`/interview?job=${job.id}`} className="mt-auto rounded-[10px] bg-sand-200 px-5 py-3 text-[15px] font-semibold text-bronze-deep hover:bg-sand-300 hover:text-bronze-deep">
-            Start Mock Interview
-          </Link>
+          <p className="m-0 text-[15px] text-gray-600">Get AI feedback on your answers, and check your resume against this job&apos;s ATS keywords.</p>
+          <div className="mt-auto flex flex-wrap gap-2.5">
+            <Link href={`/interview?job=${job.id}`} className="rounded-[10px] bg-sand-200 px-5 py-3 text-[15px] font-semibold text-bronze-deep hover:bg-sand-300 hover:text-bronze-deep">
+              Start Mock Interview
+            </Link>
+            <Link href={`/resume-checker?job=${job.id}`} className="btn-outline rounded-[10px] px-5 py-3 text-[15px]">
+              Check My Resume
+            </Link>
+          </div>
         </section>
       </div>
 

@@ -2,7 +2,7 @@
   "name": "uddaya",
   "version": "0.1.0",
   "private": true,
-  "description": "Uddaya \u2014 AI-powered job matching platform",
+  "description": "Uddaya — AI-powered job matching platform",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -21,10 +21,12 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.129.0",
     "@prisma/client": "^6.19.3",
+    "mammoth": "^1.13.0",
     "next": "^14.2.35",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "server-only": "^0.0.1",
+    "unpdf": "^1.8.1",
     "zod": "^4.6.5"
   },
   "devDependencies": {

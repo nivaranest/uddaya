@@ -146,6 +146,7 @@ export function DashboardClient({ initialQuery }: { initialQuery: string }) {
             <NavItem icon="work" label="My Applications" href="/applications" />
             <NavItem icon="favorite" label="Saved Jobs" href="#jobs" active={savedOnly} onClick={() => { setSavedOnly(true); closeMenu(); }} />
             <NavItem icon="star" label="Interview Prep" href="/interview" />
+            <NavItem icon="fact_check" label="Resume Checker" href="/resume-checker" />
             <NavItem icon="chat" label="Messages" href="#" onClick={(e) => { e.preventDefault(); closeMenu(); showToast("No new messages"); }} />
             <NavItem icon="person" label="Profile" href="/profile" />
           </nav>

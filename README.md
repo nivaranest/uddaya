@@ -12,6 +12,8 @@ This is the **foundation (PRD Phase 1)** plus the full front end from the design
 | Area | State |
 |---|---|
 | All 8 designed screens, responsive to phone width | ✅ Built (Next.js + Tailwind) |
+| Expanded landing page (how it works, features, comparison, recruiters, pricing, FAQ) | ✅ `app/page.tsx` |
+| ATS resume checker: PDF/DOCX/TXT upload, score, keyword match, AI review | ✅ `/resume-checker`, `POST /api/ai/ats-check` |
 | Mock interview feedback via Claude (PRD §9.2 #4) | ✅ `POST /api/ai/interview-feedback` |
 | Job-post AI assist: description + questions (PRD §5.2.3) | ✅ `POST /api/ai/job-assist` |
 | AI skill suggestions for job posts | ✅ `POST /api/ai/suggest-skills` |
@@ -34,7 +36,7 @@ cp .env.example .env.local   # optionally add ANTHROPIC_API_KEY
 npm run dev                  # http://localhost:3000
 ```
 
-Without `ANTHROPIC_API_KEY` the AI routes still work: interview answers are scored by an offline heuristic (labelled "offline estimate" in the UI) and job posts get a template description. Set the key to use Claude.
+Without `ANTHROPIC_API_KEY` the AI routes still work: the ATS checker returns its full score and checks (only the written AI review is skipped), interview answers are scored by an offline heuristic (labelled "offline estimate" in the UI) and job posts get a template description. Set the key to use Claude.
 
 ### Routes
 
@@ -46,6 +48,7 @@ Without `ANTHROPIC_API_KEY` the AI routes still work: interview answers are scor
 | `/applications` | Application tracker (Kanban; drag or ←/→ keys) |
 | `/interview?job=[id]` | AI mock interview |
 | `/profile` | Candidate profile (view/edit) |
+| `/resume-checker` | ATS resume checker (`?job=[id]` pre-selects a target job) |
 | `/recruiter` | Recruiter dashboard |
 | `/recruiter/jobs/new` | 5-step job posting with AI assist |
 
@@ -78,6 +81,8 @@ lib/
   ai.ts              Claude client (server-only): structured outputs + refusal fallbacks
   data.ts            Seed data standing in for the API
   matching.ts        Match explanation, keyword score, candidate-pool estimate
+  ats.ts             ATS resume analysis: sections, contact, impact, format, job keywords
+  resume-text.ts     Text extraction from PDF (unpdf) and DOCX (mammoth), server-only
   profile.ts         Profile completeness scoring
   interview.ts       Feedback schema + offline grader
   posting.ts         Posting plans and promo codes
