@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: uddaya
+    volumes: [uddaya-db:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+  app:
+    build: .
+    depends_on:
+      db: {condition: service_healthy}
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/uddaya
+      AUTH_SECRET: ${AUTH_SECRET:?set AUTH_SECRET in .env}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
+      SEED_RECRUITER_EMAIL: ${SEED_RECRUITER_EMAIL:-}
+      SEED_RECRUITER_PASSWORD: ${SEED_RECRUITER_PASSWORD:-}
+      SEED_CANDIDATE_EMAIL: ${SEED_CANDIDATE_EMAIL:-}
+      SEED_CANDIDATE_PASSWORD: ${SEED_CANDIDATE_PASSWORD:-}
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_BASE_URL: ${AI_BASE_URL:-https://api.scalemax.pro/token/v1}
+      AI_MODEL: ${AI_MODEL:-gpt-5.6-luna}
+    networks: [default, coolify]
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=coolify
+      - traefik.http.routers.uddaya.rule=Host(`uddaya.innospikes.com`)
+      - traefik.http.routers.uddaya.entrypoints=https
+      - traefik.http.routers.uddaya.tls=true
+      - traefik.http.routers.uddaya.tls.certresolver=letsencrypt
+      - traefik.http.routers.uddaya-http.rule=Host(`uddaya.innospikes.com`)
+      - traefik.http.routers.uddaya-http.entrypoints=http
+      - traefik.http.routers.uddaya-http.middlewares=uddaya-redirect
+      - traefik.http.middlewares.uddaya-redirect.redirectscheme.scheme=https
+      - traefik.http.services.uddaya.loadbalancer.server.port=3000
+networks:
+  coolify:
+    external: true
+volumes:
+  uddaya-db:

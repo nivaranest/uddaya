@@ -26,7 +26,10 @@ const FILTERS = {
 } as const satisfies Record<string, readonly AppColumn[]>;
 type Filter = keyof typeof FILTERS;
 
-export function ApplicationsClient() {
+export type Submitted = { id: string; jobId: string; title: string; company: string; status: string; matchScore: number | null; appliedAt: string };
+
+export function ApplicationsClient({ submitted: initialSubmitted }: { submitted: Submitted[] }) {
+  const [submitted, setSubmitted] = useState(initialSubmitted);
   const router = useRouter();
   const [cards, setCards] = useState(CANDIDATE_APPLICATIONS);
   const [filter, setFilter] = useState<Filter>("All");
@@ -68,6 +71,34 @@ export function ApplicationsClient() {
 
       <div className="flex flex-col gap-[18px] px-6 pb-3 pt-7">
         <h1 className="m-0 font-display text-[28px] font-semibold tracking-[-0.02em]">My Applications</h1>
+        {submitted.length > 0 && (
+          <section aria-label="Submitted applications" className="rounded-xl border border-line bg-white p-4">
+            <h2 className="m-0 font-display text-lg font-semibold">Submitted ({submitted.length})</h2>
+            <ul className="mt-2 divide-y divide-line text-sm">
+              {submitted.map((a) => (
+                <li key={a.id} className="flex flex-wrap items-center justify-between gap-2 py-2.5">
+                  <span>
+                    <Link href={`/jobs/${a.jobId}`} className="font-semibold text-gray-800">{a.title}</Link> · {a.company} · applied {a.appliedAt}
+                    {a.matchScore != null && <span className="ml-2 text-bronze-deep">{a.matchScore}% match</span>}
+                  </span>
+                  <span className="flex items-center gap-3">
+                    <b className="rounded-full bg-sand-100 px-3 py-1 text-xs capitalize text-bronze-deep">{a.status}</b>
+                    <button
+                      className="font-semibold text-red-700"
+                      onClick={async () => {
+                        const res = await fetch(`/api/applications/${a.id}`, { method: "DELETE" });
+                        if (res.ok) { setSubmitted((xs) => xs.filter((x) => x.id !== a.id)); showToast("Application withdrawn"); }
+                        else showToast("Couldn't withdraw");
+                      }}
+                    >
+                      Withdraw
+                    </button>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter applications">
             {(Object.keys(FILTERS) as Filter[]).map((label) => (

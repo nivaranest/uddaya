@@ -4,13 +4,14 @@ import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 import { CompanyLogo } from "@/components/company-logo";
 import { Dropdown } from "@/components/dropdown";
+import { LogoutLink } from "@/components/logout-link";
 import { Icon } from "@/components/icon";
 import { useLiveCandidateCount } from "@/components/live-counter";
 import { Logo } from "@/components/logo";
 import { ProgressRing } from "@/components/progress-ring";
 import { MenuButton, NavItem, Sidebar } from "@/components/sidebar";
 import { Toast, useToast } from "@/components/toast";
-import { CANDIDATE, CANDIDATE_NOTIFICATIONS, FEATURED_JOB, JOBS } from "@/lib/data";
+import { CANDIDATE, CANDIDATE_NOTIFICATIONS, FEATURED_JOB, JOBS, type Job } from "@/lib/data";
 import { cx } from "@/lib/format";
 import { profileCompletion } from "@/lib/profile";
 
@@ -22,7 +23,7 @@ const PROFILE_STEPS: [string, boolean][] = [
   ["Profile Photo", false],
 ];
 
-export function DashboardClient({ initialQuery }: { initialQuery: string }) {
+export function DashboardClient({ initialQuery, liveJobs }: { initialQuery: string; liveJobs: Job[] }) {
   const [q, setQ] = useState(initialQuery);
   const [menu, setMenu] = useState(false);
   const [bell, setBell] = useState(false);
@@ -40,11 +41,11 @@ export function DashboardClient({ initialQuery }: { initialQuery: string }) {
 
   const query = q.trim().toLowerCase();
   const jobs = useMemo(() => {
-    let list = JOBS;
+    let list = [...liveJobs, ...JOBS];
     if (query) list = list.filter((j) => `${j.title} ${j.company} ${j.location}`.toLowerCase().includes(query));
     if (savedOnly) list = list.filter((j) => saved[j.id]);
     return list;
-  }, [query, savedOnly, saved]);
+  }, [query, savedOnly, saved, liveJobs]);
 
   const { pct: profilePct } = profileCompletion({
     photo: "",
@@ -131,9 +132,7 @@ export function DashboardClient({ initialQuery }: { initialQuery: string }) {
             <MenuLink href="/profile">My Profile</MenuLink>
             <MenuLink href="/applications">My Applications</MenuLink>
             <MenuLink href="/recruiter">Switch to Recruiter</MenuLink>
-            <Link href="/" className="rounded-lg border-t border-gray-100 px-3 py-2.5 text-sm text-red-700 hover:bg-red-50 hover:text-red-700">
-              Log out
-            </Link>
+            <LogoutLink className="rounded-lg border-t border-gray-100 px-3 py-2.5 text-left text-sm text-red-700 hover:bg-red-50" />
           </Dropdown>
         </div>
       </header>

@@ -191,8 +191,40 @@ export function PostJobClient() {
     window.scrollTo(0, 0);
   }
 
-  function publish(paid: boolean) {
+  async function publish(paid: boolean) {
     // Razorpay checkout (PRD §9.3) plugs in here for "Publish & Pay Now".
+    const money = (v: string) => Number(v.replace(/[^\d]/g, "")) || null;
+    const res = await fetch("/api/jobs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: f.title.trim(),
+        category: f.category,
+        experienceLevel: (["junior", "mid", "senior", "lead"] as const)[f.level],
+        jobType: ({ "Full-time": "full_time", "Part-time": "part_time", Contract: "contract", Internship: "internship" } as const)[
+          JOB_TYPES.find((t) => f.types[t]) ?? "Full-time"
+        ],
+        location: f.location,
+        isRemote: f.remote,
+        salaryMin: money(f.salFrom),
+        salaryMax: money(f.salTo),
+        isSalaryVisible: f.showSal,
+        description: aiDesc || f.desc || f.title,
+        responsibilities: f.resp.filter(Boolean),
+        benefits: BENEFITS.filter((b) => f.benefits[b]),
+        workSchedule: SCHEDULES[f.schedule],
+        requiredSkills: f.req,
+        niceToHaveSkills: f.nice,
+        yearsOfExperienceRequired: f.years,
+        educationLevel: f.edu,
+        aiQuestions: useQs ? aiQs : [],
+      }),
+    });
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      showToast(j.error ?? "Couldn't publish the job");
+      return;
+    }
     setPublished({ paid });
     try {
       localStorage.removeItem(DRAFT_KEY);

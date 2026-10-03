@@ -1,27 +1,21 @@
 import "server-only";
-import Anthropic from "@anthropic-ai/sdk";
-import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
-import type { z } from "zod";
+import { z } from "zod";
 
 /**
- * Claude API access for Uddaya's AI features (PRD §9.2). All calls run
- * server-side only; the API key never reaches the browser.
+ * LLM access for Uddaya's AI features (PRD §9.2) via any OpenAI-compatible
+ * chat-completions endpoint. All calls run server-side only; the API key never
+ * reaches the browser.
+ *
+ * Env: AI_API_KEY, AI_BASE_URL (default https://api.scalemax.pro/token/v1), AI_MODEL.
  */
 
-export const CLAUDE_MODEL = "claude-opus-5-5";
+export const AI_MODEL = process.env.AI_MODEL || "gpt-5.6-luna";
+const BASE_URL = (process.env.AI_BASE_URL || "https://api.scalemax.pro/token/v1").replace(/\/$/, "");
 
 export class AIUnavailableError extends Error {}
 
-let client: Anthropic | null = null;
-
 export function isAIConfigured(): boolean {
-  return !!(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
-}
-
-function getClient(): Anthropic {
-  if (!isAIConfigured()) throw new AIUnavailableError("ANTHROPIC_API_KEY is not set");
-  client ??= new Anthropic();
-  return client;
+  return !!process.env.AI_API_KEY;
 }
 
 type StructuredRequest<T extends z.ZodType> = {
@@ -31,32 +25,48 @@ type StructuredRequest<T extends z.ZodType> = {
   effort?: "low" | "medium" | "high";
 };
 
-/**
- * One Claude call that returns JSON validated against `schema`.
- * Uses structured outputs, and server-side fallbacks so a safety-classifier
- * decline is retried on Anthropic's recommended fallback model.
- */
+/** One chat-completion call that returns JSON validated against `schema`. */
 export async function structuredCompletion<T extends z.ZodType>({
   system,
   prompt,
   schema,
-  effort = "medium",
 }: StructuredRequest<T>): Promise<z.infer<T>> {
-  const response = await getClient().beta.messages.parse({
-    model: CLAUDE_MODEL,
-    max_tokens: 16000,
-    betas: ["server-side-fallback-2026-07-01"],
-    fallbacks: "default",
-    system,
-    messages: [{ role: "user", content: prompt }],
-    output_config: { effort, format: betaZodOutputFormat(schema) },
-  });
+  if (!isAIConfigured()) throw new AIUnavailableError("AI_API_KEY is not set");
 
-  if (response.stop_reason === "refusal") {
-    throw new AIUnavailableError("The request was declined by the model");
+  const jsonSchema = z.toJSONSchema(schema);
+  let res: Response;
+  try {
+    res = await fetch(`${BASE_URL}/chat/completions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.AI_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: AI_MODEL,
+        messages: [
+          {
+            role: "system",
+            content: `${system}\n\nRespond with only a JSON object matching this JSON Schema:\n${JSON.stringify(jsonSchema)}`,
+          },
+          { role: "user", content: prompt },
+        ],
+        response_format: { type: "json_object" },
+      }),
+    });
+  } catch (e) {
+    throw new AIUnavailableError(`AI request failed: ${(e as Error).message}`);
   }
-  if (response.parsed_output == null) {
-    throw new AIUnavailableError(`No structured output (stop_reason: ${response.stop_reason})`);
-  }
-  return response.parsed_output as z.infer<T>;
+  if (!res.ok) throw new AIUnavailableError(`AI request failed (HTTP ${res.status})`);
+
+  const data = await res.json();
+  const choice = data?.choices?.[0];
+  const text: string | undefined = choice?.message?.content;
+  if (!text) throw new AIUnavailableError(`No output (finish_reason: ${choice?.finish_reason})`);
+
+  // Tolerate code fences around the JSON.
+  const json = text.replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, "");
+  const parsed = schema.safeParse(JSON.parse(json));
+  if (!parsed.success) throw new AIUnavailableError("Model output did not match the expected schema");
+  return parsed.data;
 }

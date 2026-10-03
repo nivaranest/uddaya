@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { Dropdown } from "@/components/dropdown";
+import { LogoutLink } from "@/components/logout-link";
 import { Icon } from "@/components/icon";
 import { Logo } from "@/components/logo";
 import { MenuButton, NavItem, Sidebar } from "@/components/sidebar";
 import { Toast, useToast } from "@/components/toast";
-import { PIPELINE_CARDS, PIPELINE_TOTALS, RECRUITER, RECRUITER_JOBS, type PipelineCard, type PipelineStage } from "@/lib/data";
+import { PIPELINE_CARDS, PIPELINE_TOTALS, type PipelineCard, type PipelineStage } from "@/lib/data";
 import { cx } from "@/lib/format";
 
 const STAGES: { id: PipelineStage; name: string; color: string }[] = [
@@ -17,12 +18,20 @@ const STAGES: { id: PipelineStage; name: string; color: string }[] = [
   { id: "offer", name: "Offer", color: "#8FC3A8" },
 ];
 
+export type Overview = {
+  company: string;
+  name: string;
+  licence: { status: string; jobsLimit: number | null } | null;
+  jobs: { id: string; title: string; apps: number; active: boolean; removed: boolean; posted: string }[];
+  totals: { applications: number; interview: number; hired: number };
+};
+
 const NAV: { icon: string; label: string; href: string; active?: boolean }[] = [
   { icon: "home", label: "Dashboard", href: "#", active: true },
-  { icon: "work", label: "My Jobs", href: "#jobs" },
-  { icon: "inbox", label: "Applications", href: "#pipeline" },
+  { icon: "work", label: "My Jobs", href: "/recruiter/jobs" },
+  { icon: "inbox", label: "Applications", href: "/recruiter/jobs" },
   { icon: "chat", label: "Messages", href: "#" },
-  { icon: "group", label: "Team", href: "#" },
+  { icon: "group", label: "Team", href: "/company" },
   { icon: "bar_chart", label: "Analytics", href: "#analytics" },
   { icon: "credit_card", label: "Billing", href: "#" },
   { icon: "settings", label: "Settings", href: "#" },
@@ -31,10 +40,12 @@ const NAV: { icon: string; label: string; href: string; active?: boolean }[] = [
 /** Time-to-hire trend, days (last 30 days). */
 const TTH_POINTS = [70, 64, 80, 76, 96, 90, 110, 104, 120, 126, 132];
 
-export function RecruiterClient() {
+export function RecruiterClient({ overview }: { overview: Overview | null }) {
   const [menu, setMenu] = useState(false);
   const [user, setUser] = useState(false);
-  const [jobs, setJobs] = useState(RECRUITER_JOBS);
+  const [jobs, setJobs] = useState(overview?.jobs ?? []);
+  const company = overview?.company ?? "Your company";
+  const slots = overview?.licence?.jobsLimit ?? null;
   const [cards, setCards] = useState<PipelineCard[]>(PIPELINE_CARDS);
   const [dragId, setDragId] = useState<number | null>(null);
   const [dropCol, setDropCol] = useState<PipelineStage | null>(null);
@@ -88,17 +99,18 @@ export function RecruiterClient() {
                   className="flex h-[42px] cursor-pointer items-center gap-2 rounded-xl border border-line bg-white py-1 pl-1 pr-2.5"
                 >
                   <span className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-gray-800 font-display text-[13px] font-semibold text-white">
-                    {RECRUITER.initials}
+                    {(overview?.name ?? "R").split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()}
                   </span>
                   <Icon name="expand_more" className="text-[20px] text-gray-500" />
                 </button>
               }
             >
               <span className="px-3 py-2.5 text-[13px] text-gray-500">
-                {RECRUITER.name} · {RECRUITER.company}
+                {overview?.name ?? "Recruiter"} · {company}
               </span>
               <Link href="/dashboard" className="rounded-lg px-3 py-2.5 text-sm text-gray-800 hover:bg-gray-50 hover:text-gray-800">Switch to Candidate</Link>
-              <Link href="/" className="rounded-lg px-3 py-2.5 text-sm text-red-700 hover:bg-red-50 hover:text-red-700">Log out</Link>
+              <Link href="/company" className="rounded-lg px-3 py-2.5 text-sm text-gray-800 hover:bg-gray-50 hover:text-gray-800">Company &amp; team</Link>
+              <LogoutLink className="rounded-lg px-3 py-2.5 text-left text-sm text-red-700 hover:bg-red-50" />
             </Dropdown>
           </div>
         </div>
@@ -132,16 +144,13 @@ export function RecruiterClient() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="flex flex-col gap-1">
               <h1 className="m-0 font-display text-[28px] font-semibold tracking-[-0.02em]">Hiring overview</h1>
-              <p className="m-0 text-[15px] text-gray-600">{RECRUITER.company} · Last 30 days</p>
+              <p className="m-0 text-[15px] text-gray-600">{company} · Last 30 days</p>
             </div>
-            {activeCount >= RECRUITER.planJobSlots && (
+            {(!overview?.licence || overview.licence.status !== "active" || (slots != null && activeCount >= slots)) && (
               <div className="flex flex-wrap items-center gap-3 rounded-xl border border-sand-line bg-sand-50 px-3.5 py-2.5 text-sm">
                 <span>
-                  {activeCount} of {RECRUITER.planJobSlots} job slots used
+                  {!overview?.licence ? "No licence — contact Uddaya to start posting jobs" : overview.licence.status !== "active" ? `Licence ${overview.licence.status}` : `${activeCount} of ${slots} job slots used`}
                 </span>
-                <a href="#" onClick={(e) => { e.preventDefault(); showToast("Plan upgrades are coming soon"); }} className="font-semibold text-bronze-dark">
-                  Upgrade plan to post more jobs
-                </a>
               </div>
             )}
           </div>
@@ -152,9 +161,9 @@ export function RecruiterClient() {
                 <polyline points="0,20 12,18 24,19 36,12 48,13 60,6 72,4" fill="none" stroke="#B07A48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </StatCard>
-            <StatCard title="Applications Received" icon="trending_up" iconCls="text-sage" value={42} valueCls="text-gray-800" caption="Total Applications" />
-            <StatCard title="To Interview" icon="event" iconCls="text-bronze-dark" value={8} valueCls="text-bronze" caption="Candidates to Interview" note="Next interview: Tomorrow at 2 PM" />
-            <StatCard title="Hired" icon="task_alt" iconCls="text-sage" value={2} valueCls="text-forest" caption="Offers Accepted" note="Last hired: 3 days ago" />
+            <StatCard title="Applications Received" icon="trending_up" iconCls="text-sage" value={overview?.totals.applications ?? 0} valueCls="text-gray-800" caption="Total Applications" />
+            <StatCard title="To Interview" icon="event" iconCls="text-bronze-dark" value={overview?.totals.interview ?? 0} valueCls="text-bronze" caption="Candidates to Interview" />
+            <StatCard title="Hired" icon="task_alt" iconCls="text-sage" value={overview?.totals.hired ?? 0} valueCls="text-forest" caption="Hired" />
           </section>
 
           <section id="jobs" className="flex scroll-mt-24 flex-col gap-3.5">
@@ -163,29 +172,34 @@ export function RecruiterClient() {
               <table className="w-full min-w-[720px] border-collapse text-sm">
                 <thead>
                   <tr className="bg-gray-50 text-left text-xs uppercase tracking-[0.05em] text-gray-500">
-                    {["Job Title", "Applications", "Views", "Status", "Posted"].map((h) => (
+                    {["Job Title", "Applications", "Status", "Posted"].map((h) => (
                       <th key={h} className="px-4 py-3 font-semibold">{h}</th>
                     ))}
                     <th className="px-4 py-3 text-right font-semibold">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {jobs.length === 0 && (
+                    <tr><td colSpan={5} className="px-4 py-6 text-center text-gray-500">No jobs yet. Post your first job.</td></tr>
+                  )}
                   {jobs.map((j, i) => (
-                    <tr key={j.title} className="group border-t border-gray-100 bg-white hover:bg-sand-50">
+                    <tr key={j.id} className="group border-t border-gray-100 bg-white hover:bg-sand-50">
                       <td className="px-4 py-3.5 font-semibold">{j.title}</td>
                       <td className="px-4 py-3.5">{j.apps}</td>
-                      <td className="px-4 py-3.5 text-gray-600">{j.views.toLocaleString("en-IN")}</td>
                       <td className="px-4 py-3.5">
                         <span className={cx("rounded-full px-2.5 py-1 text-xs font-semibold", j.active ? "bg-mint-soft text-forest-dark" : "bg-gray-100 text-gray-500")}>
-                          {j.active ? "Active" : "Closed"}
+                          {j.removed ? "Taken down" : j.active ? "Active" : "Closed"}
                         </span>
                       </td>
                       <td className="px-4 py-3.5 text-gray-600">{j.posted}</td>
                       <td className="px-4 py-2.5 text-right">
                         <div className="inline-flex gap-1.5 opacity-[.35] transition-opacity focus-within:opacity-100 group-hover:opacity-100">
-                          <Link href="/recruiter/jobs/new" className="rounded-lg border border-line px-2.5 py-1.5 text-[13px] text-gray-800 hover:border-line-hover hover:text-gray-800">Edit</Link>
+                          <Link href="/recruiter/jobs" className="rounded-lg border border-line px-2.5 py-1.5 text-[13px] text-gray-800 hover:border-line-hover hover:text-gray-800">Applications</Link>
                           <button
-                            onClick={() => {
+                            disabled={j.removed}
+                            onClick={async () => {
+                              const res = await fetch(`/api/jobs/${j.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status: j.active ? "closed" : "active" }) });
+                              if (!res.ok) return showToast((await res.json().catch(() => ({}))).error ?? "Failed");
                               setJobs((js) => js.map((x, k) => (k === i ? { ...x, active: !x.active } : x)));
                               showToast(j.active ? `${j.title} closed` : `${j.title} reopened`);
                             }}
@@ -193,7 +207,6 @@ export function RecruiterClient() {
                           >
                             {j.active ? "Close" : "Reopen"}
                           </button>
-                          <a href="#analytics" className="rounded-lg border border-line px-2.5 py-1.5 text-[13px] text-gray-800 hover:border-line-hover hover:text-gray-800">Analytics</a>
                         </div>
                       </td>
                     </tr>

@@ -16,12 +16,15 @@ type Props = {
   company: Company;
   reasons: MatchReason[];
   resumes: string[];
+  /** A job stored in the database (applications are saved), not demo data. */
+  real?: boolean;
+  alreadyApplied?: boolean;
 };
 
-export function JobDetailClient({ job, company, reasons, resumes }: Props) {
+export function JobDetailClient({ job, company, reasons, resumes, real = false, alreadyApplied = false }: Props) {
   const [more, setMore] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [applied, setApplied] = useState(false);
+  const [applied, setApplied] = useState(alreadyApplied);
   const [modal, setModal] = useState(false);
   const [resume, setResume] = useState(0);
   const [note, setNote] = useState("");
@@ -249,7 +252,15 @@ export function JobDetailClient({ job, company, reasons, resumes }: Props) {
           />
         </label>
         <button
-          onClick={() => {
+          onClick={async () => {
+            if (real) {
+              const res = await fetch("/api/applications", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jobId: job.id, coverNote: note || undefined }) });
+              if (!res.ok) {
+                setModal(false);
+                if (res.status === 409) setApplied(true);
+                return showToast((await res.json().catch(() => ({}))).error ?? "Couldn't submit the application");
+              }
+            }
             setModal(false);
             setApplied(true);
             showToast(`Application sent to ${company.name}`);

@@ -19,7 +19,6 @@
     "node": ">=18.17"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.129.0",
     "@prisma/client": "^6.19.3",
     "mammoth": "^1.13.0",
     "next": "^14.2.35",

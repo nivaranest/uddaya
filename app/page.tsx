@@ -70,10 +70,10 @@ export default function LandingPage() {
             <a href="#pricing" className="text-gray-700 hover:text-bronze">Pricing</a>
           </nav>
           <div className="ml-auto flex gap-2.5 lg:ml-0">
-            <Link href="/dashboard" className="rounded-[10px] border border-line px-[18px] py-2.5 text-[15px] font-semibold text-gray-800 hover:border-line-hover hover:text-gray-800">
+            <Link href="/login" className="rounded-[10px] border border-line px-[18px] py-2.5 text-[15px] font-semibold text-gray-800 hover:border-line-hover hover:text-gray-800">
               Login
             </Link>
-            <Link href="/profile" className="btn-primary rounded-[10px] px-[18px] py-2.5 text-[15px]">
+            <Link href="/register" className="btn-primary rounded-[10px] px-[18px] py-2.5 text-[15px]">
               Sign Up
             </Link>
           </div>
@@ -95,7 +95,7 @@ export default function LandingPage() {
               AI-powered job matching for your next opportunity. See why every job fits, get your resume past the ATS, and walk into interviews prepared.
             </p>
             <div className="mt-1.5 flex flex-wrap gap-3">
-              <Link href="/profile" className="btn-primary rounded-xl px-7 py-4 text-[17px]">Sign Up Free</Link>
+              <Link href="/register" className="btn-primary rounded-xl px-7 py-4 text-[17px]">Sign Up Free</Link>
               <Link href="/resume-checker" className="flex items-center gap-2 rounded-xl bg-white px-7 py-4 text-[17px] font-semibold text-bronze-deep hover:bg-sand-50 hover:text-bronze-deep">
                 <Icon name="fact_check" className="text-[20px]" />
                 Check My Resume
@@ -357,7 +357,7 @@ export default function LandingPage() {
             Create your free profile in minutes and see the jobs that fit you best — with the reasons why.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link href="/profile" className="btn-primary rounded-xl px-7 py-4 text-[17px]">Sign Up Free</Link>
+            <Link href="/register" className="btn-primary rounded-xl px-7 py-4 text-[17px]">Sign Up Free</Link>
             <Link href="/dashboard" className="rounded-xl bg-white px-7 py-4 text-[17px] font-semibold text-bronze-deep hover:bg-sand-50 hover:text-bronze-deep">
               Explore Jobs
             </Link>

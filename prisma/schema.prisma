@@ -260,6 +260,7 @@ model Company {
   companySize CompanySize @default(size_51_200) @map("company_size")
   logoUrl     String?     @map("logo_url")
   description String?
+  isActive    Boolean     @default(true) @map("is_active")
   location    String?     @db.VarChar(255)
   hqCountry   String?     @map("hq_country") @db.VarChar(255)
   createdAt   DateTime    @default(now()) @map("created_at")
@@ -339,6 +340,8 @@ model Job {
   educationLevel            String?         @map("education_level") @db.VarChar(255)
   aiGeneratedDescription    String?         @map("ai_generated_description")
   aiGeneratedQuestions      Json?           @map("ai_generated_questions")
+  responsibilities          Json?
+  removedByAdmin            Boolean         @default(false) @map("removed_by_admin")
   postedAt                  DateTime        @default(now()) @map("posted_at")
   closedAt                  DateTime?       @map("closed_at")
   createdAt                 DateTime        @default(now()) @map("created_at")
@@ -553,4 +556,32 @@ model Payment {
 
   @@index([subscriptionId])
   @@map("payments")
+}
+
+model Plan {
+  id                   String   @id @default(uuid()) @db.Uuid
+  planType             PlanType @unique @map("plan_type")
+  name                 String   @db.VarChar(100)
+  priceMonthly         Int      @map("price_monthly")
+  jobsLimit            Int?     @map("jobs_limit")
+  candidateSearchLimit Int?     @map("candidate_search_limit")
+  teamMembersLimit     Int?     @map("team_members_limit")
+  trialDays            Int      @default(0) @map("trial_days")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  @@map("plans")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  actorId    String?  @map("actor_id") @db.Uuid
+  actorEmail String   @map("actor_email") @db.VarChar(255)
+  action     String   @db.VarChar(100)
+  targetType String   @map("target_type") @db.VarChar(50)
+  targetId   String?  @map("target_id") @db.VarChar(100)
+  details    Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("audit_logs")
 }
